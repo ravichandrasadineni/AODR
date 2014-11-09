@@ -17,3 +17,9 @@ void getUserChoice(char choice[5]) {
 		return;
 	}
 }
+
+void intTochar( int number, char* string) {
+	snprintf(string, 10,"%d",number);
+
+}
+

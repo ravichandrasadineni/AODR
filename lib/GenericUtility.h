@@ -11,5 +11,6 @@
 
 void getUserChoice(char choice[5]);
 
+void intTochar( int number, char* string);
 #endif /* GENERICUTILITY_H_ */
 
