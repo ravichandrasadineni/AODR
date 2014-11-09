@@ -11,7 +11,7 @@
 #include <stdio.h>
 
 void getIpAddressFromDomainName(char* string, char* ipAddress) ;
-
+void getDomainName(char* ipAddressString, char* domainName);
 
 
 

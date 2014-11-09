@@ -13,6 +13,7 @@
 void connectToODR(int sockfd);
 void connectToTimeClientServer(int sockfd);
 int getclientBindedsocket();
+int getServerBindedsocket();
 void unLinkSocket(int sockFd);
 
 #endif /* UDSUTILITY_H_ */

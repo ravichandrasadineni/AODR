@@ -29,13 +29,16 @@ LIBS = -lresolv -lnsl -pthread -lm unpv13e/libunp.a
 FLAGS = -g -O0
 
 CFLAGS = ${FLAGS} -I unpv13e/lib
-all: client  
+all: client  server
 
 OBJECTS=AddressUtility.o GenericUtility.o ODRAPI.o UDSUtility.o
 
 
 client: client.o $(OBJECTS)
 	${CC} ${FLAGS} -o client client.o $(OBJECTS) ${LIBS}
+	
+server: server.o $(OBJECTS)
+	${CC} ${FLAGS} -o server server.o $(OBJECTS) ${LIBS}
 	
 AddressUtility.o: lib/AddressUtility.c
 	${CC} ${CFLAGS} -c lib/AddressUtility.c
@@ -53,5 +56,5 @@ UDSUtility.o: lib/UDSUtility.c
 
 
 clean:
-	rm  client  $(OBJECTS)
+	rm  client server $(OBJECTS)
 
