@@ -18,8 +18,8 @@ void printRequest(char* clientIp) {
 	memset(domainName,'\0', 256);
 	getDomainName(clientIp,domainName);
 	printf("server at node   %s  responding to request from   %s \n",localHostname,domainName);
-
 }
+
 int main (int argc, char* argv) {
 	int sockfd;
 	char clientMessage[MAXLINE];
