@@ -16,16 +16,18 @@ int isValidDomainName(char* string) {
 
  void getIpAddressFromDomainName(char* string, char* ipAddress) {
 	struct hostent *he;
+	struct in_addr localHost;
 	struct in_addr **addr_list;
 	int numOfIpaddress =0;
+	char localHostname[1024];
+	gethostname(localHostname, 1023);
 	if(!isValidDomainName(string)) {
 		exit(0);
 	}
 	he = gethostbyname(string);
-	printf("Official name is: %s\n", he->h_name);
     addr_list = (struct in_addr **)he->h_addr_list;
     int i;
 	char* ip_address = inet_ntoa(*addr_list[0]);
-	printf("IP addresses: %s", ip_address);
-    	strncpy(ip_address,ipAddress, INET_ADDRSTRLEN);
+    strncpy(ip_address,ipAddress, INET_ADDRSTRLEN);
+    printf("sending message from %s to %s \n",localHostname,string);
 }
