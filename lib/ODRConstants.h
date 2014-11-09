@@ -13,5 +13,6 @@
 #define ODR_CLIENT_PRE "/tmp/file-XXXXXX"
 #define DELIMETER ":::"
 
+#define TIME_SERVER_PORT  1234
 
 #endif /* ODRCONSTANTS_H_ */

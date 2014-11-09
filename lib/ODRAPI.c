@@ -30,10 +30,17 @@ char* marshallMessage(char destination[INET_ADDRSTRLEN],int port, char* message,
 
 void unMarshallMessage(char* destination,int *port, char* message, char* marshelledMessage) {
 	char tokenMessage[strlen(destination)];
+
 	strncpy(marshelledMessage, tokenMessage,  strlen(marshelledMessage));
-	destination = strtok(tokenMessage, "::::");
-	*port = atoi(strtok(tokenMessage, "::::"));
-	message = strtok(tokenMessage, "::::");
+	if(destination) {
+		destination = strtok(tokenMessage, "::::");
+	}
+	if(port) {
+		*port = atoi(strtok(tokenMessage, "::::"));
+	}
+	if(message) {
+		message = strtok(tokenMessage, "::::");
+	}
 }
 
 
