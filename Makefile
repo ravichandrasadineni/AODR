@@ -31,7 +31,7 @@ FLAGS = -g -O0
 CFLAGS = ${FLAGS} -I unpv13e/lib
 all: client  
 
-OBJECTS=AddressUtility.o GenericUtility.o
+OBJECTS=AddressUtility.o GenericUtility.o ODRAPI.o UDSUtility.o
 
 
 client: client.o $(OBJECTS)
@@ -42,6 +42,13 @@ AddressUtility.o: lib/AddressUtility.c
 
 GenericUtility.o: lib/GenericUtility.c
 	${CC} ${CFLAGS} -c lib/GenericUtility.c
+	
+ODRAPI.o: lib/ODRAPI.c
+	${CC} ${CFLAGS} -c lib/ODRAPI.c
+	
+UDSUtility.o: lib/UDSUtility.c
+	${CC} ${CFLAGS} -c lib/UDSUtility.c
+	
 
 
 

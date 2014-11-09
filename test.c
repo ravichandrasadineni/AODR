@@ -13,6 +13,5 @@ int main (int argc, char*argv) {
 	strncat(temp3,temp2,5);
 	strncat(temp3,"::::",5);
 	strncpy(temp4,temp3,5);
-	printf("String is %s",temp3);
 
 }

@@ -1,16 +1,22 @@
 #include "lib/AddressUtility.h"
 #include "lib/GenericUtility.h"
+#include "lib/UDSUtility.h"
 int main(int argc, char*argv[]) {
 
 	char userchoice[5];
 	char ipAddress[INET_ADDRSTRLEN];
-	//bindtoTemporary sun_path
+	int clientSocket;
+
 	while(1) {
+
 		getUserChoice(userchoice);
 		getIpAddressFromDomainName(userchoice,ipAddress);
-		printf("%s \n",ipAddress);
+		getclientBindedsocket();
+		connectToODR(clientSocket);
+		printf("connected to ODR\n");
+		unLinkSocket(clientSocket);
+		close(clientSocket);
+
 	}
-
-	//Unbind
-
+	return 0;
 }
