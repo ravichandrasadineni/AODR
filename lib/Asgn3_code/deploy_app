@@ -1,0 +1,17 @@
+#!/bin/bash
+
+NUM_VMs=10
+
+if [ $# -lt 1 ]
+then 
+  echo "Usage: deploy_app <List of files>"
+  exit 0
+fi
+
+echo "Deploying Files on VMs: " 
+for ((i=1; $i <= $NUM_VMs; i=i+1)); 
+  do echo "vm$i " 
+    scp -p $@ root@vm$i:/home/$USER
+    sleep 1
+done
+

@@ -25,7 +25,6 @@ int isValidDomainName(char* string) {
 	printf("Official name is: %s\n", he->h_name);
     addr_list = (struct in_addr **)he->h_addr_list;
     int i;
-
 	char* ip_address = inet_ntoa(*addr_list[0]);
 	printf("IP addresses: %s", ip_address);
     	strncpy(ip_address,ipAddress, INET_ADDRSTRLEN);
