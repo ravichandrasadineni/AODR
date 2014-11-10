@@ -16,7 +16,8 @@
 #define ETHERNET0 "eth0"
 #define LOOPBACKIF "lo"
 #define ETH_TYPE "4581"
-
+#define FILE_NAME_LENGTH 32
+#define FILE_PORT_MAP_TIMEOUT 20
 #define TIME_SERVER_PORT  1234
 
 #endif /* ODRCONSTANTS_H_ */

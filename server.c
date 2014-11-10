@@ -27,7 +27,7 @@ int main (int argc, char* argv) {
 	char clientIp[INET_ADDRSTRLEN];
 	int clientPort =0;
 	sockfd = getServerBindedsocket();
-	connectToODR(sockfd);
+	//connectToODR(sockfd);
 	while(1) {
 		msg_recv(sockfd,clientMessage,clientIp,&clientPort);
 		printRequest(clientIp);
