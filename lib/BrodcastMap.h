@@ -7,7 +7,10 @@
 
 #ifndef LIB_BRODCASTMAP_H_
 #define LIB_BRODCASTMAP_H_
-#include ""
+#include "unp.h"
+#include "ODRConstants.h"
+int isReqAlreadySent( char [HADDR_LEN]);
+int addTOBroadCastList( char[HADDR_LEN]);
 
 
 

@@ -18,8 +18,8 @@ void buildBuffer(char* sourceMac, char* destinationMac, char *data, void* buffer
 typedef struct {
 	int packetType;
 	int Broadcastid;
-	char sourceAddress[IF_HADDR];
-	char destAddress[IF_HADDR];
+	char sourceAddress[HADDR_LEN];
+	char destAddress[HADDR_LEN];
 	int hopcount;
 }ODRHeader;
 

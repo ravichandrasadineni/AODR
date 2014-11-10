@@ -17,7 +17,7 @@
 #include "Asgn3_code/hw_addrs.h"
 
 struct interfacefInfo {
-	char    if_haddr[IF_HADDR];	/* hardware address */
+	char    if_haddr[HADDR_LEN];	/* hardware address */
 	int     if_index;
 	struct interfacefInfo  *next;
 

@@ -5,13 +5,13 @@
 #include <sys/socket.h>
 
 #define	IF_NAME		16	/* same as IFNAMSIZ    in <net/if.h> */
-#define	IF_HADDR	 6	/* same as IFHWADDRLEN in <net/if.h> */
+#define	HADDR_LEN	 6	/* same as IFHWADDRLEN in <net/if.h> */
 
 #define	IP_ALIAS  	 1	/* hwa_addr is an alias */
 
 struct hwa_info {
   char    if_name[IF_NAME];	/* interface name, null terminated */
-  char    if_haddr[IF_HADDR];	/* hardware address */
+  char    if_haddr[HADDR_LEN];	/* hardware address */
   int     if_index;		/* interface index */
   short   ip_alias;		/* 1 if hwa_addr is an alias IP address */
   struct  sockaddr  *ip_addr;	/* IP address */

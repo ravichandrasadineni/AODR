@@ -55,7 +55,7 @@ void getListOfInterfaces(ifInfo* ifList, int* size ) {
 			currentPosition = currentPosition->next;
 		}
 		(*size)++;
-		strncpy(currentPosition->if_haddr,hwa->if_haddr,IF_HADDR);
+		strncpy(currentPosition->if_haddr,hwa->if_haddr,HADDR_LEN);
 		currentPosition->if_index = hwa->if_index;
 	}
 	free_hwa_info(hwahead);
