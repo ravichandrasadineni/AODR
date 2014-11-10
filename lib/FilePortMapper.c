@@ -84,8 +84,15 @@ void deleteEntry(int port) {
 		if(currentPosition->port == port) {
 			if(prevPosition == NULL) {
 				filePortMapHead = filePortMapHead->next;
+				if(filePortMapHead  == NULL)
+					filePortMapTail = NULL;
 				free(currentPosition);
 				return;
+			}
+			else if(currentPosition->next == NULL) {
+				filePortMapTail = prevPosition;
+				prevPosition->next= NULL;
+				free(prevPosition);
 			}
 			else {
 				prevPosition-> next = currentPosition->next;
@@ -112,7 +119,7 @@ void removeTimeOutEntries() {
 			currentPosition= currentPosition->next;
 			continue;
 		}
-		if(difftime(time(NULL),currentPosition->entryTime)) {
+		if(difftime(time(NULL),currentPosition->entryTime)>FILE_PORT_MAP_TIMEOUT) {
 			// order is crucial to avoid dangling pointer
 			// move to the next entry and delete the current or current
 			// will point to freed memory
