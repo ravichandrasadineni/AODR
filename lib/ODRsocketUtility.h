@@ -10,15 +10,23 @@
 #include "unp.h"
 #include "ODRConstants.h"
 #include "MemoryAllocator.h"
-typedef struct  {
+#include <sys/socket.h>
+#include <linux/if_packet.h>
+#include <linux/if_ether.h>
+#include <linux/if_arp.h>
+#include "Asgn3_code/hw_addrs.h"
+
+struct interfacefInfo {
 	char    if_haddr[IF_HADDR];	/* hardware address */
 	int     if_index;
-	ifInfo * next;
+	struct interfacefInfo  *next;
 
-}ifInfo;
+}interfacefInfo ;
 
-void createAndBindSocketsTOInterfaces(int* sockets, int number);
+typedef struct interfacefInfo  ifInfo;
+
+void createAndBindSocketsTOInterfaces(int* sockets, int* number);
 void getListOfInterfaces(ifInfo* ifList, int* size );
-struct sockaddr_ll getBindedSocket(int sockfd);
+struct sockaddr_ll getODRBindedSocket(int sockfd);
 int createNewSocket();
 #endif /* LIB_ODRSOCKETUTILITY_H_ */

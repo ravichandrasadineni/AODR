@@ -14,7 +14,7 @@ int isEth0(char* name) {
 	return 0;
 }
 
-struct sockaddr_ll getBindedSocket(int sockfd) {
+struct sockaddr_ll getODRBindedSocket(int sockfd) {
 	struct sockaddr_ll odrSocket;
 	int sockLen;
 	if(getsockname(sockfd, (SA*)&odrSocket	,&sockLen)<0) {
@@ -25,7 +25,7 @@ struct sockaddr_ll getBindedSocket(int sockfd) {
 }
 
 int createNewSocket() {
-	int s = socket(PF_PACKET, SOCK_RAW,htons(ETH_TYPE));
+	int s = socket(PF_PACKET, SOCK_RAW,htons(atoi(ETH_TYPE)));
 	if(s == -1) {
 		perror("socket Error: ");
 		exit(0);
@@ -66,7 +66,7 @@ void createAndBindSocketsTOInterfaces(int* sockets, int* number) {
 	int size;
 	getListOfInterfaces(&ifList,&size);
 	sockets = allocate_intmem(size);
-	number = size;
+	(*number) = size;
 	int i;
 	for(i=0;i<size; i++) {
 		int sockfd = createNewSocket();

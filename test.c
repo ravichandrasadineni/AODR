@@ -28,7 +28,7 @@ int main (int argc, char*argv) {
 	int length = 0; /*length of the received frame*/
 	unsigned char* etherhead = buffer;
 	memset(buffer, '\0', ETH_FRAME_LEN2);
-	length = recv(s, buffer, ETH_FRAME_LEN2, 0);
+	length = recvfrom(s, buffer, ETH_FRAME_LEN2, 0,(struct sockaddr*)&sADDR,sizeof(sADDR));
 	if (length <= 0) {
 		perror("Error: ");
 		exit(0);
@@ -36,7 +36,7 @@ int main (int argc, char*argv) {
 	else {
 		printf ("MAC address for interface is ");
 		for (i=0; i<5; i++) {
-			printf ("%02x:", ((char*)buffer)[i]);
+			printf ("%02x:", sADDR.sll_addr[i]);
 		}
 		printf ("%02x\n",((char*) buffer)[5]);
 	}

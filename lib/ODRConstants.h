@@ -20,7 +20,8 @@
 #define PACKET_RREQ 0
 #define PACKET_RREP 1
 #define PACKET_MSG 2
-
+#define FILE_NAME_LENGTH 32
+#define FILE_PORT_MAP_TIMEOUT 20
 #define TIME_SERVER_PORT  1234
 
 #endif /* ODRCONSTANTS_H_ */

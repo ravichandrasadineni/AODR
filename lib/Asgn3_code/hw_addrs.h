@@ -1,6 +1,7 @@
 /* Our own header for the programs that need hardware address info. */
-
+#include "unp.h"
 #include <stdio.h>
+#include<stdlib.h>
 #include <sys/socket.h>
 
 #define	IF_NAME		16	/* same as IFNAMSIZ    in <net/if.h> */
