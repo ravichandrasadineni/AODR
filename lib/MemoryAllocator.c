@@ -9,6 +9,23 @@
 #include "unp.h"
 
 
+void* allocate_void(int len) {
+	void *tmp;
+	if (len <= 0) {
+		fprintf (stderr, "ERROR: Cannot allocate memory because len = %i in allocate_strmem().\n", len);
+		exit (EXIT_FAILURE);
+	}
+	tmp = (char *) malloc (len);
+	if (tmp != NULL) {
+		memset (tmp, 0, len);
+		return (tmp);
+	}else {
+		fprintf (stderr, "ERROR: Cannot allocate memory for array allocate_strmem().\n");
+		exit (EXIT_FAILURE);
+	}
+
+}
+
 
 char *allocate_strmem (int len)
 {
