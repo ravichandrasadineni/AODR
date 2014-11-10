@@ -11,7 +11,11 @@
 #define TIME_SERVER "/tmp/rsadineni-timeServer"
 #define ODR_SERVER "/tmp/rsadineni-odrServer"
 #define ODR_CLIENT_PRE "/tmp/file-XXXXXX"
+#define	IF_HADDR	 6	/* same as IFHWADDRLEN in <net/if.h> */
 #define DELIMETER ":::"
+#define ETHERNET0 "eth0"
+#define LOOPBACKIF "lo"
+#define ETH_TYPE "4581"
 
 #define TIME_SERVER_PORT  1234
 

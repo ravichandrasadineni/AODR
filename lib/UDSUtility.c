@@ -55,8 +55,8 @@ int getServerBindedsocket() {
 void unLinkSocket(int sockFd) {
 	struct sockaddr_un unixSocket;
 	int sockLen;
-	if(getsockname(sockFd, (SA*)&unixSocket	,&sockLen)) {
-		perror("Failed to UNLINK temperory FIle ");
+	if(getsockname(sockFd, (SA*)&unixSocket	,&sockLen)<0) {
+		perror("Failed to UNLINK temporary FIle ");
 		return;
 	}
 	remove(unixSocket.sun_path);
