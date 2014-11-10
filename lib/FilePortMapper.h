@@ -13,13 +13,13 @@
 #include "ODRConstants.h"
 #include <time.h>
 
-typedef struct {
+struct filePortMapper{
 	int port;
 	char fileName[32];
 	time_t entryTime;
-	filePortMap *next;
-}filePortMap;
-
+	struct filePortMapper *next;
+};
+typedef struct filePortMapper filePortMap;
 void initializeportMap();
 void addEntry(int port, char *fileName);
 void deleteEntry(int port);

@@ -56,7 +56,7 @@ void addEntry(int port, char *fileName) {
 		filePortMapTail = filePortMapHead;
 	}
 	else {
-		filePortMap* filePortMapTail->next = (filePortMap*)allocate_void(sizeof(filePortMap));
+		filePortMapTail->next = (filePortMap*)allocate_void(sizeof(filePortMap));
 		filePortMapTail = filePortMapTail->next;
 	}
 	if(port == TIME_SERVER_PORT) {
