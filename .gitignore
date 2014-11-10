@@ -27,3 +27,4 @@
 *.x86_64
 *.hex
 .cproject
+Local*.sh
