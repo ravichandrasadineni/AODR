@@ -7,6 +7,7 @@
 
 #ifndef LIB_MEMORYALLOCATOR_H_
 #define LIB_MEMORYALLOCATOR_H_
+#include<stdint.h>
 
 char *allocate_strmem (int len);
 uint8_t *allocate_ustrmem (int len);

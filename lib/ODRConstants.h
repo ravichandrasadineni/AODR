@@ -16,6 +16,10 @@
 #define ETHERNET0 "eth0"
 #define LOOPBACKIF "lo"
 #define ETH_TYPE "4581"
+#define TYPE_SIZE 2
+#define PACKET_RREQ 0
+#define PACKET_RREP 1
+#define PACKET_MSG 2
 
 #define TIME_SERVER_PORT  1234
 

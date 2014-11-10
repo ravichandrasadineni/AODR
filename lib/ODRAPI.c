@@ -16,7 +16,7 @@ char* marshallMessage(char destination[INET_ADDRSTRLEN],int port, char* message,
 	char *temp = NULL;
 	intTochar(port,portStr);
 	intTochar(forceRoute,forceRouteStr);
-	int messageLength = INET_ADDRSTRLEN + strlen(portStr) + strlen(message) + strlen(forceRouteStr) + 4*strlen("::::");
+	int messageLength = INET_ADDRSTRLEN + strlen(portStr) + strlen(message) + strlen(forceRouteStr) + 4*strlen(DELIMETER);
 	char*  marshelledMessage = (char*)malloc(messageLength*sizeof(char));
 	memset(marshelledMessage, '\0', messageLength*sizeof(char));
 	strncat(marshelledMessage,destination,INET_ADDRSTRLEN);
