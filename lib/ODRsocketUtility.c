@@ -78,4 +78,25 @@ void createAndBindSocketsTOInterfaces(int** sockets, int* number) {
 	return;
 }
 
+int createAndBindUDS() {
 
+	int sockfd, fileFd;
+	char nameBuff[32];
+	struct sockaddr_un servaddr;
+	bzero(&servaddr, sizeof(servaddr));
+	sockfd = socket(AF_LOCAL,SOCK_DGRAM,0);
+	if(sockfd < 0) {
+		perror("unable to create client Unix Domain Socket :");
+		exit(0);
+	}
+	memset(nameBuff,0,sizeof(nameBuff));
+	strncpy(nameBuff,ODR_SERVER,25);
+	unlink(nameBuff);
+	servaddr.sun_family = AF_LOCAL;
+	strncpy(servaddr.sun_path,nameBuff,strlen(nameBuff));
+	if(bind(sockfd,(SA *)&servaddr, sizeof(servaddr))<0) {
+		perror("Failed to Bind Unix Domain Socket :");
+		exit(0);
+	}
+	return sockfd;
+}
