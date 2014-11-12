@@ -15,7 +15,6 @@ struct ODRrouteEntry {
 	char destinationAddress[HADDR_LEN];
 	int socketId;
 	int hopcount;
-	int broadCastId;
 	time_t timeCreated;
 	struct ODRrouteEntry *next;
 };
@@ -23,11 +22,11 @@ struct ODRrouteEntry {
 typedef struct ODRrouteEntry routeEntry;
 
 void setExpiryTime(int secs);
-void addRoute(char destinationAddress[HADDR_LEN], int interfaceId,int hopcount, int broadCastId);
-int getHopCountIfRouteExist(char destinationAddress[HADDR_LEN], int broadCastId);
-int getOutInfForDest(char destinationAddress[HADDR_LEN], int broadCastId);
+void addRoute(char destinationAddress[HADDR_LEN], int interfaceId,int hopcount);
+int getHopCountIfRouteExist(char destinationAddress[HADDR_LEN]);
+int getOutInfForDest(char destinationAddress[HADDR_LEN]);
 void deleteTimeoutEnries();
-void doesRouteExist(char destinationAddress[HADDR_LEN], int broadCastId);
+void doesRouteExist(char destinationAddress[HADDR_LEN]);
 
 
 

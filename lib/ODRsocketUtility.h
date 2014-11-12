@@ -25,8 +25,9 @@ struct interfacefInfo {
 
 typedef struct interfacefInfo  ifInfo;
 
-void createAndBindSocketsTOInterfaces(int* sockets, int* number);
-void getListOfInterfaces(ifInfo* ifList, int* size );
+void createAndBindSocketsTOInterfaces(int** sockets, int* number);
+int createAndBindUDS();
+void getListOfInterfaces(ifInfo** ifList, int* size );
 struct sockaddr_ll getODRBindedSocket(int sockfd);
 int createNewSocket();
 #endif /* LIB_ODRSOCKETUTILITY_H_ */

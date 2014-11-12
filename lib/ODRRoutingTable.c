@@ -13,13 +13,13 @@ routeEntry *routeTableHead =NULL, *routeTableTail =NULL;
 void setExpiryTime(int secs) {
 	timeout_secs = secs;
 }
-void addRoute(char destinationAddress[HADDR_LEN], int socketId,int hopcount, int broadCastId) {
+void addRoute(char destinationAddress[HADDR_LEN], int socketId,int hopcount) {
 	if(routeTableHead == NULL) {
 		routeTableHead= (routeEntry*)llocate_void(sizeof(routeEntry));
 		routeTableTail = routeTableHead;
 	}
 	else {
-		int currentHopCount = getHopCountIfRouteExist(destinationAddress,broadCastId);
+		int currentHopCount = getHopCountIfRouteExist(destinationAddress);
 		if((currentHopCount > 0)&&(currentHopCount <hopcount)) {
 			return;
 		}
@@ -27,7 +27,6 @@ void addRoute(char destinationAddress[HADDR_LEN], int socketId,int hopcount, int
 		routeTableTail = routeTableTail->next;
 	}
 	routeTableTail->next = NULL;
-	routeTableTail->broadCastId = broadCastId;
 	routeTableTail->socketId = socketId;
 	routeTableTail->hopcount = hopcount;
 	routeTableTail->timeCreated = time_t(NULL);
@@ -87,7 +86,7 @@ void deleteTimeoutEnries() {
 	}
 }
 
-int doesRouteExist(char destinationAddress[HADDR_LEN], int broadCastId) {
+int doesRouteExist(char destinationAddress[HADDR_LEN]) {
 	routeEntry* currentPosition = routeTableHead;
 	if(routeTableHead == NULL) {
 		return 0;
@@ -95,9 +94,9 @@ int doesRouteExist(char destinationAddress[HADDR_LEN], int broadCastId) {
 	else  {
 		while(currentPosition != NULL) {
 			if(strncmp(currentPosition->destinationAddress,destinationAddress,6)) {
-				if(currentPosition->broadCastId >= broadCastId) {
-					return 1;
-				}
+
+				return 1;
+
 			}
 			currentPosition = currentPosition->next;
 		}
@@ -106,7 +105,7 @@ int doesRouteExist(char destinationAddress[HADDR_LEN], int broadCastId) {
 	return 0;
 }
 
-int getOutInfForDest(char destinationAddress[HADDR_LEN], int broadCastId) {
+int getOutInfForDest(char destinationAddress[HADDR_LEN]) {
 	routeEntry* currentPosition = routeTableHead;
 	if(routeTableHead == NULL) {
 		return 0;
@@ -114,9 +113,8 @@ int getOutInfForDest(char destinationAddress[HADDR_LEN], int broadCastId) {
 	else  {
 		while(currentPosition != NULL) {
 			if(strncmp(currentPosition->destinationAddress,destinationAddress,6)) {
-				if(currentPosition->broadCastId >= broadCastId) {
-					return currentPosition->socketId;
-				}
+				return currentPosition->socketId;
+
 			}
 			currentPosition = currentPosition->next;
 		}
@@ -125,7 +123,7 @@ int getOutInfForDest(char destinationAddress[HADDR_LEN], int broadCastId) {
 	return 0;
 }
 
-int getHopCountIfRouteExist(char destinationAddress[HADDR_LEN], int broadCastId) {
+int getHopCountIfRouteExist(char destinationAddress[HADDR_LEN]) {
 	routeEntry* currentPosition = routeTableHead;
 	if(routeTableHead == NULL) {
 		return 0;
@@ -133,9 +131,8 @@ int getHopCountIfRouteExist(char destinationAddress[HADDR_LEN], int broadCastId)
 	else  {
 		while(currentPosition != NULL) {
 			if(strncmp(currentPosition->destinationAddress,destinationAddress,6)) {
-				if(currentPosition->broadCastId >= broadCastId) {
-					return currentPosition->hopcount;
-				}
+				return currentPosition->hopcount;
+
 			}
 			currentPosition = currentPosition->next;
 		}
