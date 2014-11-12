@@ -12,6 +12,6 @@
 #include "ODRConstants.h"
 
 void getListeningSet(fd_set *readSet,int *maxfd, int* ifSockets, int count, int UDSsocket);
-
+int getTimeOut(int argc, char*argv[]) ;
 
 #endif /* LIB_ODRUTILITY_H_ */

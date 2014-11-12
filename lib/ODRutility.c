@@ -21,3 +21,15 @@ void getListeningSet(fd_set *readSet,int *maxfd, int* ifSockets, int count, int 
 	*maxfd = MAX(*maxfd,UDSsocket);
 	return;
 }
+
+
+
+
+int getTimeOut(int argc, char*argv[]) {
+
+	if (argc != 2) {
+		printf("Wrong Input. USage ODR <timeoutSecs> \n");
+		exit(2);
+	}
+	return atoi(argv[1]);
+}

@@ -2,12 +2,13 @@
 #include "lib/ODRsocketUtility.h"
 #include "lib/ODRUtility.h"
 
-int main(int argc,char *arg[]){
+int main(int argc,char *argv[]){
 	int *ifSockets, numOFInf, udsSocket;
 	createAndBindSocketsTOInterfaces(&ifSockets,&numOFInf);
 	udsSocket = createAndBindUDS();
 	printf("udsSocket is %d \n", udsSocket);
 	// Listen on all the sockets
+	int timeOutSecs = getTimeOut(argc, argv);
 	fd_set readSet;
 	int maxfd;
 	while(1) {
@@ -15,6 +16,7 @@ int main(int argc,char *arg[]){
 		if((select(maxfd,&readSet,NULL,NULL,NULL))<0) {
 			perror("Select on ODR FAILED");
 		}
+
 
 	}
 
