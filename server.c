@@ -10,7 +10,6 @@
 #include "lib/AddressUtility.h"
 
 
-
 void printRequest(char* clientIp) {
 	char domainName[256];
 	char localHostname[1024];

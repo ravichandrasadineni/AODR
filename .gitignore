@@ -30,3 +30,4 @@
 Local*.sh
 client
 server
+.settings/*

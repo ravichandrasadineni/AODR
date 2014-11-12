@@ -24,7 +24,7 @@ typedef struct {
 }ODRHeader;
 
 typedef struct{
-	ODRHeader header;
+	ODRHeader *header;
 	char *payload;
 }ODRPacket;
 #endif /* LIB_FRAMEBUFFERUTILITY_H_ */

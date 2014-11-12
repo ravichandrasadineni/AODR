@@ -12,7 +12,6 @@
 void breakBuffer(char* sourceMac, char* destinationMac, char *data, void* buffer) {
 	int i,dataSize;
 	int length = sizeof((char*)buffer);
-
 	dataSize = length - sizeof(sourceMac) - sizeof(destinationMac) - TYPE_SIZE;
 	strncat(sourceMac, ((char*)buffer),HADDR_LEN);
 	strncat(destinationMac, ((char*)buffer)+HADDR_LEN,HADDR_LEN);
@@ -27,31 +26,28 @@ void buildBuffer(char* sourceMac, char* destinationMac, char *data, void* buffer
 	strncat(((char*)buffer)+2 * HADDR_LEN + 2, data, sizeof(data));
 }
 
-void buildRREQ(char *sourceMac, char* destinationMac, char *data, int broadcastInter, ODRHeader *currentPacket){
+void buildRREQ(char *sourceMac, char* destinationMac, char *data, ODRHeader *currentPacket){
 	currentPacket->packetType = 0;
-	currentPacket->destAddress = destinationMac;
-	currentPacket->sourceAddress = sourceMac;
+	strcpy(currentPacket->destAddress, destinationMac);
+	strcpy(currentPacket->sourceAddress, sourceMac);
 	currentPacket->hopcount = 0;
-	currentPacket->Broadcastid = broadcastInter;
 }
 
-void buildRREP(char *sourceMac, char* destinationMac, char *data, int broadcastInter, ODRHeader *currentPacket){
+void buildRREP(char *sourceMac, char* destinationMac, char *data, ODRHeader *currentPacket){
 	currentPacket->packetType = 1;
-	currentPacket->destAddress = destinationMac;
-	currentPacket->sourceAddress = sourceMac;
+	strcpy(currentPacket->destAddress, destinationMac);
+	strcpy(currentPacket->sourceAddress, sourceMac);
 	currentPacket->hopcount = 0;
-	currentPacket->Broadcastid = broadcastInter;
 }
 
-ODRPacket* buildPayload(char *sourceMac, char* destinationMac, char *data, int broadcastInter, ODRHeader *currentPacket){
+ODRPacket* buildPayload(char *sourceMac, char* destinationMac, char *data, ODRHeader *currentPacket){
 	ODRPacket *MsgPacket;
 	currentPacket->packetType = 2;
-	currentPacket->destAddress = destinationMac;
-	currentPacket->sourceAddress = sourceMac;
+	strcpy(currentPacket->destAddress, destinationMac);
+	strcpy(currentPacket->sourceAddress, sourceMac);
 	currentPacket->hopcount = 0;
-	currentPacket->Broadcastid = broadcastInter;
 	MsgPacket->header = currentPacket;
-	MsgPacket->payload = data;
+	strcpy(MsgPacket->payload, data);
 	return MsgPacket;
 }
 
