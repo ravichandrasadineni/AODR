@@ -5,9 +5,9 @@
  *      Author: ravichandrasadineni
  */
 
-int timeout_secs = 0;
-#include "ODRRoutingTable.h"
 
+#include "ODRRoutingTable.h"
+int timeout_secs = 0;
 routeEntry *routeTableHead =NULL, *routeTableTail =NULL;
 
 void setExpiryTime(int secs) {
