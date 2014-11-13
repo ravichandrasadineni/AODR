@@ -21,12 +21,12 @@ struct ODRrouteEntry {
 
 typedef struct ODRrouteEntry routeEntry;
 
-void setExpiryTime(int secs);
+void setExpiryTimeForRoutingTable(int secs);
 void addRoute(char destinationAddress[HADDR_LEN], int interfaceId,int hopcount);
 int getHopCountIfRouteExist(char destinationAddress[HADDR_LEN]);
 int getOutInfForDest(char destinationAddress[HADDR_LEN]);
 void deleteTimeoutEnries();
-void doesRouteExist(char destinationAddress[HADDR_LEN]);
+int doesRouteExist(char destinationAddress[HADDR_LEN]);
 
 
 

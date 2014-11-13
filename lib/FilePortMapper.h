@@ -20,7 +20,7 @@ struct filePortMapper{
 	struct filePortMapper *next;
 };
 typedef struct filePortMapper filePortMap;
-void initializeportMap();
+void initializeportMap(int timeOut);
 void addEntry(int port, char *fileName);
 void deleteEntry(int port);
 void removeTimeOutEntries();

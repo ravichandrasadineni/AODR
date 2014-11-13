@@ -6,7 +6,7 @@
 #include <linux/if_ether.h>
 #include <linux/if_arp.h>
 
-#define ETH_FRAME_LEN2 1536
+#define ETH_FRAME_LEN2 1936
 
 int main (int argc, char*argv) {
 	struct sockaddr_ll sADDR;
@@ -18,18 +18,22 @@ int main (int argc, char*argv) {
 		perror("socket Error: ");
 		exit(0);
 	}
+	sADDR.sll_family = AF_PACKET;
 	sADDR.sll_ifindex = 0;
 	sADDR.sll_protocol = htons(ETH_P_ALL);
-	//	if(bind(s,(struct sockaddr*)&sADDR, sizeof(sADDR))<0) {
-	//		perror("bind Error: ");
-	//		exit(0);
-	//	}
+		if(bind(s,(struct sockaddr*)&sADDR, sizeof(sADDR))<0) {
+			perror("bind Error: ");
+			exit(0);
+		}
 	void* buffer = (void*)malloc(ETH_FRAME_LEN2); /*Buffer for ethernet frame*/
 	int length = 0; /*length of the received frame*/
 	unsigned char* etherhead = buffer;
 	memset(buffer, '\0', ETH_FRAME_LEN2);
-	length = recvfrom(s, buffer, ETH_FRAME_LEN2, 0,(struct sockaddr*)&sADDR,sizeof(sADDR));
-	if (length <= 0) {
+	perror("before recv from");
+	length = recvfrom(s, buffer, ETH_FRAME_LEN2, 0,(struct sockaddr*)&sADDR,&sADDRLength);
+	perror("After recv from");
+	printf("length is %d \n", length);
+	if (length < 0) {
 		perror("Error: ");
 		exit(0);
 	}

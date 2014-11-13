@@ -22,38 +22,48 @@ void printTimeoutMessage(char* destinationVm) {
 }
 
 
+void printMessageSend(char* userchoice) {
+	char localHostname[1024];
+	gethostname(localHostname, 1023);
+	printf("sending message from %s to %s \n",localHostname,userchoice);
+}
+
+
 int main(int argc, char*argv[]) {
 
 	char userchoice[5];
-	char ipAddress[INET_ADDRSTRLEN];
+	char serverIpAddress[INET_ADDRSTRLEN];
 	int clientSocket;
 	char serverReply[MAXLINE];
 	char clientMessage[MAXLINE];
+	char localclientIp[INET_ADDRSTRLEN];
 	struct timeval tv;
 	int maxfd=0;
 	fd_set readSet;
 	int forceRoute =0;
 	int isRetransmitted = 0;
 	strncpy(clientMessage,MESSAGE, strlen(MESSAGE));
+	populateLocalAddress(localclientIp);
 	while(1) {
 		FD_ZERO (&readSet);
 		getUserChoice(userchoice);
-		getIpAddressFromDomainName(userchoice,ipAddress);
-		printf("IP Address is %s \n", ipAddress);
+		getIpAddressFromDomainName(userchoice,serverIpAddress);
+		printf("IP Address is %s \n", serverIpAddress);
 		clientSocket = getclientBindedsocket();
 		//connectToODR(clientSocket);
+
 		connectToTimeClientServer(clientSocket);
 		maxfd = clientSocket + 1;
 		while(1) {
 			FD_SET(clientSocket,&readSet);
 			tv.tv_sec = 2;
 			tv.tv_usec = 0;
-			msg_send(clientSocket,ipAddress,TIME_SERVER_PORT,clientMessage,forceRoute);
+			msg_send(clientSocket,localclientIp,serverIpAddress,TIME_SERVER_PORT,clientMessage,forceRoute);
 			if((select(maxfd,&readSet,NULL,NULL,&tv))<0) {
 				perror("Select in the client Failed :");
 			}
 			if(FD_ISSET(clientSocket,&readSet)) {
-				msg_recv(clientSocket,serverReply,NULL,NULL);
+				msg_recv(clientSocket,serverReply,NULL,NULL,NULL,NULL);
 				printRecievedMessage(userchoice);
 				break;
 			}

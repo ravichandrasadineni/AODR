@@ -23,6 +23,13 @@ void getListeningSet(fd_set *readSet,int *maxfd, int* ifSockets, int count, int 
 }
 
 
+DataPacket getData(int sockfd)  {
+	DataPacket newDataPacket;
+	msg_recv(sockfd,  newDataPacket.message, newDataPacket.source, newDataPacket.destination, &(newDataPacket.port), &(newDataPacket.forceRoute));
+	return newDataPacket;
+
+}
+
 
 
 int getTimeOut(int argc, char*argv[]) {

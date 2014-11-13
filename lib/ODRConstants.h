@@ -13,6 +13,7 @@
 #define ODR_CLIENT_PRE "/tmp/file-XXXXXX"
 #define	HADDR_LEN 6	/* same as IFHWADDRLEN in <net/if.h> */
 #define DELIMETER ":::"
+#define DATAPACKET_BUFFER_SIZE 1024
 #define ETHERNET0 "eth0"
 #define LOOPBACKIF "lo"
 #define ETH_TYPE 4581
@@ -21,7 +22,6 @@
 #define PACKET_RREP 1
 #define PACKET_MSG 2
 #define FILE_NAME_LENGTH 32
-#define FILE_PORT_MAP_TIMEOUT 20
 #define TIME_SERVER_PORT  1234
 
 #endif /* ODRCONSTANTS_H_ */

@@ -13,6 +13,13 @@ int isValidDomainName(char* string) {
 	 return 1;
 }
 
+void populateLocalAddress(char localAddress[INET_ADDRSTRLEN]) {
+	char localHostname[1024];
+	gethostname(localHostname, 1023);
+	getIpAddressFromDomainName(localHostname,localAddress);
+}
+
+
 void getDomainName(char* ipAddressString, char* domainName) {
 	struct hostent *he;
 	struct in_addr ipAddress;
@@ -31,8 +38,6 @@ void getDomainName(char* ipAddressString, char* domainName) {
 	struct in_addr localHost;
 	struct in_addr **addr_list;
 	int numOfIpaddress =0;
-	char localHostname[1024];
-	gethostname(localHostname, 1023);
 	if(!isValidDomainName(string)) {
 		exit(0);
 	}
@@ -40,7 +45,5 @@ void getDomainName(char* ipAddressString, char* domainName) {
     addr_list = (struct in_addr **)he->h_addr_list;
     int i;
 	char* ip_address = inet_ntoa(*addr_list[0]);
-	printf("IP Address is %s \n", ip_address);
     strncpy(ipAddress,ip_address, INET_ADDRSTRLEN);
-    printf("sending message from %s to %s \n",localHostname,string);
 }

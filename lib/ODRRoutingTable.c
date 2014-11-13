@@ -10,12 +10,12 @@
 int timeout_secs = 0;
 routeEntry *routeTableHead =NULL, *routeTableTail =NULL;
 
-void setExpiryTime(int secs) {
+void setExpiryTimeForRoutingTable(int secs) {
 	timeout_secs = secs;
 }
 void addRoute(char destinationAddress[HADDR_LEN], int socketId,int hopcount) {
 	if(routeTableHead == NULL) {
-		routeTableHead= (routeEntry*)llocate_void(sizeof(routeEntry));
+		routeTableHead= (routeEntry*)allocate_void(sizeof(routeEntry));
 		routeTableTail = routeTableHead;
 	}
 	else {
@@ -29,11 +29,11 @@ void addRoute(char destinationAddress[HADDR_LEN], int socketId,int hopcount) {
 	routeTableTail->next = NULL;
 	routeTableTail->socketId = socketId;
 	routeTableTail->hopcount = hopcount;
-	routeTableTail->timeCreated = time_t(NULL);
+	routeTableTail->timeCreated = time(NULL);
 	strncpy(routeTableTail->destinationAddress,destinationAddress,HADDR_LEN);
 }
 
-void deleteEntry(routeEntry* currentPosition, routeEntry* prevPosition ) {
+void deleteRouteEntry(routeEntry* currentPosition, routeEntry* prevPosition ) {
 	if(routeTableHead == NULL) {
 		return ;
 	}

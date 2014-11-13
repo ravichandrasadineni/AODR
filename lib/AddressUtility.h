@@ -12,7 +12,7 @@
 
 void getIpAddressFromDomainName(char* string, char* ipAddress) ;
 void getDomainName(char* ipAddressString, char* domainName);
-
+void populateLocalAddress(char localAddress[INET_ADDRSTRLEN]);
 
 
 

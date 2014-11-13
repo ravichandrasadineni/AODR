@@ -9,7 +9,10 @@
 filePortMap*  filePortMapHead = NULL;
 filePortMap*  filePortMapTail = NULL;
 
-void initializeportMap() {
+int timOutSecs = 0;
+
+void initializeportMap(int timeOut) {
+	timOutSecs = timeOut;
 	addEntry(TIME_SERVER_PORT, TIME_SERVER);
 }
 
@@ -119,7 +122,7 @@ void removeTimeOutEntries() {
 			currentPosition= currentPosition->next;
 			continue;
 		}
-		if(difftime(time(NULL),currentPosition->entryTime)>FILE_PORT_MAP_TIMEOUT) {
+		if(difftime(time(NULL),currentPosition->entryTime)>timOutSecs) {
 			// order is crucial to avoid dangling pointer
 			// move to the next entry and delete the current or current
 			// will point to freed memory

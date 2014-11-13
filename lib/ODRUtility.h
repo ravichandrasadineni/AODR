@@ -11,6 +11,16 @@
 #include "unp.h"
 #include "ODRConstants.h"
 
+typedef struct  {
+	char message[1500];
+	char source[INET_ADDRSTRLEN];
+	char destination[INET_ADDRSTRLEN];
+	int port;
+	int forceRoute;
+
+}DataPacket;
+
+
 void getListeningSet(fd_set *readSet,int *maxfd, int* ifSockets, int count, int UDSsocket);
 int getTimeOut(int argc, char*argv[]) ;
 
