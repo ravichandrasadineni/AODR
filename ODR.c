@@ -4,6 +4,18 @@
 #include "lib/ODRUtility.h"
 #include "lib/ODRRoutingTable.h"
 
+
+int getSetSocket(int *ifSockets, int numOfInf, fd_set *readSet) {
+	int i;
+	for(i=0; i<numOfInf;i++) {
+		if(FD_ISSET(ifSockets[i],readSet)) {
+			return ifSockets[i];
+		}
+	}
+	return -1;
+}
+
+
 int main(int argc,char *argv[]){
 	int *ifSockets, numOFInf, udsSocket;
 	createAndBindSocketsTOInterfaces(&ifSockets,&numOFInf);
@@ -20,6 +32,7 @@ int main(int argc,char *argv[]){
 			perror("Select on ODR FAILED");
 
 		}
+		printf("some socket set \n");
 		if (FD_ISSET(udsSocket,&readSet)) {
 			DataPacket  currentDataPacket;
 			struct sockaddr_un cliaddr;
@@ -30,6 +43,22 @@ int main(int argc,char *argv[]){
 			printf("ODR.c: SourcePortNumber and DestinationPortNumber before sending is %d %d\n", currentDataPacket.sourcePort, currentDataPacket.destinationPort);
 			sendDataPacket(currentDataPacket,udsSocket,ifSockets,numOFInf);
 
+		}
+		else {
+			int setSocket = getSetSocket(ifSockets, numOFInf,&readSet);
+			char *newFrame = allocate_strmem(FRAME_LENGTH);
+			recv_rawpacket(setSocket,newFrame);
+			printf("recieved Packet \n");
+			//ODRFrame currentFrame = breakFrame(newFrame);
+//			if(currentFrame.header.packetType == PACKET_RREQ) {
+//				handleRREQ(currentFrame);
+//			}
+//			else if (currentFrame.header.packetType ==  PACKET_RREP) {
+//				handleRREP(currentFrame);
+//			}
+//			else if (currentFrame.header.packetType ==  PACKET_RREP)  {
+//				handleDataPacket(currentFrame);
+//			}
 		}
 
 

@@ -7,6 +7,9 @@
 #include "FrameBufferUtility.h"
 
 void buildFrame(char* sourceMac, char* destinationMac, char *data, char* frame) {
+	struct ethhdr  *eth;
+	unsigned short type=htons(ETH_TYPE);
+	eth = (struct ethhdr*) frame;
 	if(data == NULL) {
 		printf("FrameBufferUtility.c: data is NULL \n");
 		exit(0);
@@ -15,13 +18,11 @@ void buildFrame(char* sourceMac, char* destinationMac, char *data, char* frame) 
 		printf("FrameBufferUtility.c: frame is NULL \n");
 		exit(0);
 	}
-	unsigned short type=htons(ETH_TYPE);
-	memcpy(frame,destinationMac,HADDR_LEN);
-	memcpy(frame+HADDR_LEN,sourceMac,HADDR_LEN);
-	memcpy(frame+2*HADDR_LEN,(unsigned char *)&type,ETH_TYPE_LEN);
-	memcpy(frame+2*HADDR_LEN+ETH_TYPE_LEN,data,strlen(data));
+	memcpy(eth->h_dest,destinationMac,HADDR_LEN);
+	memcpy(eth->h_source,sourceMac,HADDR_LEN);
+	eth->h_proto = type;
+	memcpy(eth+1,data,strlen(data));
     frame[MAC_HEADER_LEN+strlen(data)]='\0';
-    printf("Length of data is %c \n",frame[6]);
 	printf("FrameBufferUtility.c : The frame after building is %s \n",frame);
 }
 
@@ -47,6 +48,7 @@ char * MarshalledFramePayload(ODRFrame currentFrame) {
 }
 
 void breakFrame(char* sourceMac, char* destinationMac, char *data, void* buffer) {
+	ODRFrame currentFrame;
 	int i,dataSize;
 	int length = sizeof((char*)buffer);
 	dataSize = length - sizeof(sourceMac) - sizeof(destinationMac) - ETH_TYPE_LEN;
@@ -58,7 +60,7 @@ void breakFrame(char* sourceMac, char* destinationMac, char *data, void* buffer)
 
 
 char* buildRREQ(ODRFrame currentFrame){
-	currentFrame.header.packetType = 0;
+	currentFrame.header.packetType = PACKET_RREQ;
 	char* frame = allocate_strmem(FRAME_LENGTH);
 	char* dataPayLoad = MarshalledFramePayload(currentFrame);
 	buildFrame(currentFrame.header.sourceAddress, currentFrame.header.destAddress, dataPayLoad,frame);
@@ -67,7 +69,7 @@ char* buildRREQ(ODRFrame currentFrame){
 }
 
 char* buildRREP(ODRFrame currentFrame){
-	currentFrame.header.packetType = 1;
+	currentFrame.header.packetType =  PACKET_RREP;
 	currentFrame.header.Broadcastid =0;
 	char* frame = allocate_strmem(FRAME_LENGTH);
 	char* dataPayLoad = MarshalledFramePayload(currentFrame);
@@ -77,7 +79,7 @@ char* buildRREP(ODRFrame currentFrame){
 }
 
 char* buildMessageFrame(ODRFrame currentFrame){
-	currentFrame.header.packetType = 2;
+	currentFrame.header.packetType = PACKET_MSG;
 	currentFrame.header.Broadcastid =0;
 	char* frame = allocate_strmem(FRAME_LENGTH);
 	memset(frame,'\0',FRAME_LENGTH);

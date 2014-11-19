@@ -8,7 +8,7 @@
 
 void send_rawpacket (int raswSock, unsigned char * frame) {
 	int sent= 0;
-	int pack_len = strlen(frame);
+	int pack_len = FRAME_LENGTH;
 	printf("FrameSendRecvUtility.c : The size of the packet is %d\n",pack_len);
 	if((sent=write(raswSock, frame, pack_len)) != pack_len)
 	{
