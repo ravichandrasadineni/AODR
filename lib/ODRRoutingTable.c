@@ -13,13 +13,37 @@ routeEntry *routeTableHead =NULL, *routeTableTail =NULL;
 void setExpiryTimeForRoutingTable(int secs) {
 	timeout_secs = secs;
 }
-void addRoute(char destinationAddress[HADDR_LEN],char destinationIPAddress[INET_ADDRSTRLEN],  int socketId,int hopcount) {
+
+
+void printRoutingTable() {
+	routeEntry* currentPosition = routeTableHead;
+	if(routeTableHead == NULL) {
+		printf("No entries \n");
+	}
+	else  {
+		while(currentPosition != NULL) {
+			printf("%s \t",currentPosition->destinationIPAddress);
+			printf("%d \t",currentPosition->hopcount);
+			printf("%d \t",currentPosition->socketId);
+			printMacAddress(currentPosition->destinationMACAddress);
+		}
+		currentPosition = currentPosition->next;
+	}
+
+}
+
+
+
+
+void addRoute(char destinationMACAddress[HADDR_LEN],char destinationIPAddress[INET_ADDRSTRLEN],  int socketId,int hopcount) {
+	printf("Before adding Route \n");
+	printRoutingTable();
 	if(routeTableHead == NULL) {
 		routeTableHead= (routeEntry*)allocate_void(sizeof(routeEntry));
 		routeTableTail = routeTableHead;
 	}
 	else {
-		int currentHopCount = getHopCountIfRouteExist(destinationAddress);
+		int currentHopCount = getHopCountIfRouteExist(destinationMACAddress);
 		if((currentHopCount > 0)&&(currentHopCount <hopcount)) {
 			return;
 		}
@@ -31,10 +55,15 @@ void addRoute(char destinationAddress[HADDR_LEN],char destinationIPAddress[INET_
 	routeTableTail->hopcount = hopcount;
 	strncpy(routeTableTail->destinationIPAddress,destinationIPAddress,INET_ADDRSTRLEN);
 	routeTableTail->timeCreated = time(NULL);
-	strncpy(routeTableTail->destinationMACAddress,destinationAddress,HADDR_LEN);
+	strncpy(routeTableTail->destinationMACAddress,destinationMACAddress,HADDR_LEN);
+	printf("After adding Route \n");
+	printRoutingTable();
+
 }
 
 void deleteRouteEntry(routeEntry* currentPosition, routeEntry* prevPosition ) {
+	printf("Before deleting Route \n");
+	printRoutingTable();
 	if(routeTableHead == NULL) {
 		return ;
 	}
@@ -61,9 +90,12 @@ void deleteRouteEntry(routeEntry* currentPosition, routeEntry* prevPosition ) {
 		prevPosition->next = currentPosition->next;
 		free(currentPosition);
 	}
+	printf("After deleting Route \n");
+	printRoutingTable();
 }
 
 int isTimeExpired(time_t currentTime) {
+
 	int timeDiff = difftime(time(NULL), currentTime);
 	if(timeDiff>=timeout_secs) {
 		return 1;
@@ -179,24 +211,3 @@ int getHopCountIfRouteExist(char destinationAddress[HADDR_LEN]) {
 	return 0;
 }
 
-
-void printRoutingTable() {
-	routeEntry* currentPosition = routeTableHead;
-	if(routeTableHead == NULL) {
-		printf("No entries \n");
-	}
-	else  {
-		while(currentPosition != NULL) {
-
-				printf("%s",currentPosition->destinationIPAddress);
-				printf("%s",currentPosition->hopcount);
-
-				printMacAddress(currentPosition->destinationMACAddress);
-
-
-			}
-			currentPosition = currentPosition->next;
-		}
-	}
-
-}
