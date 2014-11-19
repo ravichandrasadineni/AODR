@@ -38,31 +38,13 @@ char* marshallMessage(DataPacket packet) {
 void unMarshallMessage(char* marshelledMessage, DataPacket *packet) {
 	char tokenMessage[MAXLINE];
 	memset(tokenMessage,'\0',MAXLINE);
-	//memset(message,'\0',MAXLINE);
-	printf("Marshalled Message in unmarshalling is %s \n",marshelledMessage);
 	strncpy(tokenMessage,marshelledMessage,  strlen(marshelledMessage));
-	printf("Token Message is %s \n",tokenMessage);
-
 	strncpy(packet->source,strtok(tokenMessage, DELIMETER), INET_ADDRSTRLEN);
-	printf("Source is %s \n", packet->source);
-
 	packet->sourcePort = atoi(strtok(NULL, DELIMETER));
-	printf("sourcePort is %d \n", packet->sourcePort);
-
 	strncpy(packet->destination,strtok(NULL, DELIMETER), INET_ADDRSTRLEN);
-	printf("Destination is %s \n", packet->destination);
-
-
 	packet->destinationPort = atoi(strtok(NULL, DELIMETER));
-	printf("Destination port is %d \n", packet->destinationPort);
-
-
-
 	packet->forceRoute = atoi(strtok(NULL, DELIMETER));
-
-
 	strncpy(packet->message,strtok(NULL, DELIMETER),FRAME_BUFFER_LENGTH);
-	printf("message is %s \n", packet->message);
 
 }
 

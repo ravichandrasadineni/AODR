@@ -48,29 +48,35 @@ char * MarshalledFramePayload(ODRFrame currentFrame) {
 	return frame;
 }
 
-void breakFrame(char* sourceMac, char* destinationMac, char *data, void* buffer) {
-	ODRFrame breakFrame(char* currentFrame) {
-		/*The packet received will have the structure DestinationMacSourceMacPackettypePakcetLength(header)
-		 * PakcetType:::Hopcount:::BroadcastID:::souceIPaddr:::sourcePort:::DestIPAddr:::DestPort:::forceroute:::Message*/
-		ODRFrame receivedFrame;
-		char frameToken[FRAME_LENGTH];
-		memset(frameToken,'\0',FRAME_LENGTH);
-		struct ethhdr *eth;
-		eth = (struct ethhdr *)currentFrame;
-		int type = ntohs(eth->h_proto);
-		if(type != ETH_TYPE){
-			printf("We have received wrong packet with type %d \n",type);
-			printf("Program will exit\n");
-			exit(0);
-		}
-		memcpy(receivedFrame->header.destAddress,eth->h_dest,HADDR_LEN);
-		memcpy(receivedFrame->header.sourceAddress,eth->h_source,HADDR_LEN);
-		char* frameMessage = (char*)(eth+1);
-		strncpy(frameToken,frameMessage, strlen(frameMessage));
-
-
-		return receivedFrame;
+ODRFrame breakFrame(char* currentFrame) {
+	/*The packet received will have the structure DestinationMacSourceMacPackettypePakcetLength(header)
+	 * PakcetType:::Hopcount:::BroadcastID:::souceIPaddr:::sourcePort:::DestIPAddr:::DestPort:::forceroute:::Message*/
+	ODRFrame receivedFrame;
+	char frameToken[FRAME_LENGTH];
+	memset(frameToken,'\0',FRAME_LENGTH);
+	struct ethhdr *eth;
+	eth = (struct ethhdr *)currentFrame;
+	int type = ntohs(eth->h_proto);
+	if(type != ETH_TYPE){
+		printf("We have received wrong packet with type %d \n",type);
+		printf("Program will exit\n");
+		exit(0);
 	}
+	memcpy(receivedFrame.header.destAddress,eth->h_dest,HADDR_LEN);
+	memcpy(receivedFrame.header.sourceAddress,eth->h_source,HADDR_LEN);
+	char* frameMessage = (char*)(eth+1);
+	strncpy(frameToken,frameMessage, strlen(frameMessage));
+	receivedFrame.header.packetType = atoi(strtok(frameMessage, DELIMETER));
+	receivedFrame.header.hopcount = atoi(strtok(NULL, DELIMETER));
+	receivedFrame.header.Broadcastid = atoi(strtok(NULL, DELIMETER));
+	strncpy(receivedFrame.data.source,strtok(NULL, DELIMETER), INET_ADDRSTRLEN);
+	receivedFrame.data.sourcePort = atoi(strtok(NULL, DELIMETER));
+	strncpy(receivedFrame.data.destination,strtok(NULL, DELIMETER), INET_ADDRSTRLEN);
+	receivedFrame.data.destinationPort = atoi(strtok(NULL, DELIMETER));
+	receivedFrame.data.forceRoute = atoi(strtok(NULL, DELIMETER));
+	strncpy(receivedFrame.data.message,strtok(NULL, DELIMETER),FRAME_BUFFER_LENGTH);
+	printFrame(receivedFrame);
+	return receivedFrame;
 }
 
 

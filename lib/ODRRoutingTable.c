@@ -143,7 +143,7 @@ int getHopCountForROute(char destinationAddress[INET_ADDRSTRLEN]) {
 }
 
 
- void populateDestMacAddressForRoute(char destinationAddress[INET_ADDRSTRLEN], char destMacAddress [HADDR_LEN]) {
+void populateDestMacAddressForRoute(char destinationAddress[INET_ADDRSTRLEN], char destMacAddress [HADDR_LEN]) {
 	routeEntry* currentPosition = routeTableHead;
 	if(routeTableHead == NULL) {
 		return ;
@@ -177,4 +177,26 @@ int getHopCountIfRouteExist(char destinationAddress[HADDR_LEN]) {
 	}
 
 	return 0;
+}
+
+
+void printRoutingTable() {
+	routeEntry* currentPosition = routeTableHead;
+	if(routeTableHead == NULL) {
+		printf("No entries \n");
+	}
+	else  {
+		while(currentPosition != NULL) {
+
+				printf("%s",currentPosition->destinationIPAddress);
+				printf("%s",currentPosition->hopcount);
+
+				printMacAddress(currentPosition->destinationMACAddress);
+
+
+			}
+			currentPosition = currentPosition->next;
+		}
+	}
+
 }

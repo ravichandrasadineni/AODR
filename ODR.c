@@ -32,7 +32,6 @@ int main(int argc,char *argv[]){
 			perror("Select on ODR FAILED");
 
 		}
-		printf("some socket set \n");
 		if (FD_ISSET(udsSocket,&readSet)) {
 			DataPacket  currentDataPacket;
 			struct sockaddr_un cliaddr;
@@ -48,11 +47,10 @@ int main(int argc,char *argv[]){
 			int setSocket = getSetSocket(ifSockets, numOFInf,&readSet);
 			char *newFrame = allocate_strmem(FRAME_LENGTH);
 			recv_rawpacket(setSocket,newFrame);
-			printf("recieved Packet \n");
-			//ODRFrame currentFrame = breakFrame(newFrame);
-//			if(currentFrame.header.packetType == PACKET_RREQ) {
-//				handleRREQ(currentFrame);
-//			}
+			ODRFrame currentFrame = breakFrame(newFrame);
+			if(currentFrame.header.packetType == PACKET_RREQ) {
+				handleRREQ(currentFrame);
+			}
 //			else if (currentFrame.header.packetType ==  PACKET_RREP) {
 //				handleRREP(currentFrame);
 //			}

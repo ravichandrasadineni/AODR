@@ -22,6 +22,23 @@ typedef struct  {
 }DataPacket;
 
 
+typedef struct {
+	int packetType;
+	int Broadcastid;
+	char sourceAddress[HADDR_LEN];
+	char destAddress[HADDR_LEN];
+	int hopcount;
+}ODRHeader;
+
+typedef struct{
+	ODRHeader header;
+	DataPacket data;
+}ODRFrame;
+
+
+
+
+void printFrame (ODRFrame receivedFrame) ;
 
 
 

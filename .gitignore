@@ -32,3 +32,4 @@ client
 server
 ODR
 .settings/*
+/Debug/
