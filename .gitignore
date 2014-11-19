@@ -30,4 +30,5 @@
 Local*.sh
 client
 server
+ODR
 .settings/*

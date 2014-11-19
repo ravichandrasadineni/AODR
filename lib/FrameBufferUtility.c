@@ -20,6 +20,8 @@ void buildFrame(char* sourceMac, char* destinationMac, char *data, char* frame) 
 	memcpy(frame+HADDR_LEN,sourceMac,HADDR_LEN);
 	memcpy(frame+2*HADDR_LEN,(unsigned char *)&type,ETH_TYPE_LEN);
 	memcpy(frame+2*HADDR_LEN+ETH_TYPE_LEN,data,strlen(data));
+    frame[MAC_HEADER_LEN+strlen(data)]='\0';
+    printf("Length of data is %c \n",frame[6]);
 	printf("FrameBufferUtility.c : The frame after building is %s \n",frame);
 }
 
@@ -59,7 +61,6 @@ char* buildRREQ(ODRFrame currentFrame){
 	currentFrame.header.packetType = 0;
 	char* frame = allocate_strmem(FRAME_LENGTH);
 	char* dataPayLoad = MarshalledFramePayload(currentFrame);
-	printf("FrameBufferUtility.c : The source address is %s Destination address is %s\n",currentFrame.header.sourceAddress,currentFrame.header.destAddress);
 	buildFrame(currentFrame.header.sourceAddress, currentFrame.header.destAddress, dataPayLoad,frame);
 	free(dataPayLoad);
 	return frame;

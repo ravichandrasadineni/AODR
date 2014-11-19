@@ -13,9 +13,9 @@ void  getSourceMacForInterface(int sockFd, char sourceMac[HADDR_LEN] ) {
 	int i=0;
 	memset(sourceMac,'\0',HADDR_LEN);
 	for(i=0; i < sockInfMapsize; i++) {
-		printf("ODRScocketUtility.c : The source mac address is %s \n",sockToInfMapper[i].sourceMac);
 		if(sockToInfMapper[i].sockfd == sockFd) {
-			strncpy(sourceMac,sockToInfMapper[i].sourceMac,HADDR_LEN);
+			printf("ODRScocketUtility.c : The source mac address is %s \n",sockToInfMapper[i].sourceMac);
+			memcpy(sourceMac,sockToInfMapper[i].sourceMac,HADDR_LEN);
 			return;
 		}
 	}
@@ -65,7 +65,7 @@ void getListOfInterfaces(ifInfo** ifList, int* size ) {
 			currentPosition = currentPosition->next;
 		}
 		(*size)++;
-		strncpy(currentPosition->if_haddr,hwa->if_haddr,HADDR_LEN);
+		memcpy(currentPosition->if_haddr,hwa->if_haddr,HADDR_LEN);
 		currentPosition->if_index = hwa->if_index;
 	}
 	free_hwa_info(hwahead);
@@ -92,7 +92,8 @@ void createAndBindSocketsTOInterfaces(int** sockets, int* number) {
 			exit(1);
 		}
 		sockToInfMapper[sockInfMapsize].sockfd = sockfd;
-		strncpy(sockToInfMapper[sockInfMapsize].sourceMac,ifList->if_haddr,6);
+		memcpy(sockToInfMapper[sockInfMapsize].sourceMac,ifList->if_haddr,HADDR_LEN);
+		printMacAddress(sockToInfMapper[sockInfMapsize].sourceMac);
 		(*sockets)[i]= sockfd;
 		ifList = ifList->next;
 		sockInfMapsize++;

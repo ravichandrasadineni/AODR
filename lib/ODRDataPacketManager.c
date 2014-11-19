@@ -28,7 +28,6 @@ void sendDataFrame(DataPacket packet ) {
 	send_rawpacket(outgoingSocket,frame);
 	printf("ODRDataPacketManager.c :FRAME SENT IS  %s \n",frame);
 	free(frame);
-	printf("ODRDataPacketManager.c : Destination Mac Address is %s \n",currentFrame.header.destAddress);
 }
 
 void parkIntoBuffer(DataPacket packet) {
@@ -53,17 +52,20 @@ void sendDataPacket(DataPacket packet,int udsSocket,int *ifSockets,int numOFInf)
 			parkIntoBuffer(packet);
 			ODRFrame currentFrame;
 			currentFrame.data= packet;
-			strncpy(currentFrame.header.destAddress,BRODCAST_MAC, HADDR_LEN);
+			memcpy(currentFrame.header.destAddress,BRODCAST_MAC, HADDR_LEN);
 			currentFrame.header.hopcount=0;
 			currentFrame.header.Broadcastid = CURRENT_BRODCAST_ID;
 			int i;
 			for(i=0;i<numOFInf;i++) {
 				getSourceMacForInterface( ifSockets[i],  currentFrame.header.sourceAddress);
+				printf("ODRDataPacketManager.c  : Source Mac Address is : ");
+				printMacAddress(currentFrame.header.sourceAddress);
+				printf("ODRDataPacketManager.c  : Destination Mac Address is :");
+				printMacAddress(currentFrame.header.destAddress);
 				char* frame = buildRREQ(currentFrame);
 				send_rawpacket(ifSockets[i], frame);
 				printf("ODRDataPacketManager.c  :FRAME SENT IS  %s \n",frame);
 				free(frame);
-				printf("ODRDataPacketManager.c  : Destination Mac Address is %s \n",currentFrame.header.destAddress);
 			}
 			CURRENT_BRODCAST_ID++;
 		}

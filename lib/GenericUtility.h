@@ -28,7 +28,7 @@ typedef struct  {
 
 
 void getUserChoice(char choice[5]);
-
+void printMacAddress (char haddr[HADDR_LEN]);
 void intTochar( int number, char* string);
 #endif /* GENERICUTILITY_H_ */
 
