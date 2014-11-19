@@ -13,6 +13,7 @@ void  getSourceMacForInterface(int sockFd, char sourceMac[HADDR_LEN] ) {
 	int i=0;
 	memset(sourceMac,'\0',HADDR_LEN);
 	for(i=0; i < sockInfMapsize; i++) {
+		printf("ODRScocketUtility.c : The source mac address is %s \n",sockToInfMapper[i].sourceMac);
 		if(sockToInfMapper[i].sockfd == sockFd) {
 			strncpy(sourceMac,sockToInfMapper[i].sourceMac,HADDR_LEN);
 			return;
@@ -90,11 +91,11 @@ void createAndBindSocketsTOInterfaces(int** sockets, int* number) {
 			perror("BINDING SOCKET TO INTERFACE FAILED :");
 			exit(1);
 		}
-		sockToInfMapper[size].sockfd = sockfd;
-		sockInfMapsize++;
-		strncpy(sockToInfMapper[size].sourceMac,ifList->if_haddr,6);
+		sockToInfMapper[sockInfMapsize].sockfd = sockfd;
+		strncpy(sockToInfMapper[sockInfMapsize].sourceMac,ifList->if_haddr,6);
 		(*sockets)[i]= sockfd;
 		ifList = ifList->next;
+		sockInfMapsize++;
 	}
 
 	return;

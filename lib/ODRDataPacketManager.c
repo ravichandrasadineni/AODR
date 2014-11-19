@@ -38,10 +38,10 @@ void parkIntoBuffer(DataPacket packet) {
 
 void sendDataPacket(DataPacket packet,int udsSocket,int *ifSockets,int numOFInf)  {
 	if(!(strncmp(packet.destination,packet.source,INET_ADDRSTRLEN))) {
-		printf("ODRPacketManager.c : LocalHost communication \n");
+		printf("ODRDataPacketManager.c  : LocalHost communication \n");
 		char destinationPath[FILE_NAME_LENGTH];
 		getFileName(packet.destinationPort,destinationPath);
-		printf("ODRPacketManager.c : Destination File Path is %s \n",destinationPath);
+		printf("ODRDataPacketManager.c  : Destination File Path is %s \n",destinationPath);
 		msg_sendTo(udsSocket,packet,destinationPath );
 	}
 	else {
@@ -61,9 +61,9 @@ void sendDataPacket(DataPacket packet,int udsSocket,int *ifSockets,int numOFInf)
 				getSourceMacForInterface( ifSockets[i],  currentFrame.header.sourceAddress);
 				char* frame = buildRREQ(currentFrame);
 				send_rawpacket(ifSockets[i], frame);
-				printf("ODRPacketManager.c :FRAME SENT IS  %s \n",frame);
+				printf("ODRDataPacketManager.c  :FRAME SENT IS  %s \n",frame);
 				free(frame);
-				printf("ODRPacketManager.c : Destination Mac Address is %s \n",currentFrame.header.destAddress);
+				printf("ODRDataPacketManager.c  : Destination Mac Address is %s \n",currentFrame.header.destAddress);
 			}
 			CURRENT_BRODCAST_ID++;
 		}

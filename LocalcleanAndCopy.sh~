@@ -1,3 +1,3 @@
 rsync -avz /home/harsha/Dropbox/AODR hellanti@minix.cs.stonybrook.edu://home/stufs1/hellanti/
 
-ssh hellanti@minix.cs.stonybrook.edu 'cd /home/stufs1/hellanti/AODR/; make clean; make; /home/stufs1/hellanti/cse533/deploy_app client server; cd /home/stufs1/hellanti/AODR/lib/Asgn3_code; /home/stufs1/hellanti/cse533/deploy_app prhwaddrs'
+ssh hellanti@minix.cs.stonybrook.edu 'cd /home/stufs1/hellanti/AODR/; make clean; make; /home/stufs1/hellanti/cse533/deploy_app client server odr /home/stufs1/hellanti/AODR/lib/Asgn3_code/prhwaddrs'
