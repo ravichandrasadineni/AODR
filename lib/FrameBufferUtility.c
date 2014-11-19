@@ -22,7 +22,8 @@ void buildFrame(char* sourceMac, char* destinationMac, char *data, char* frame) 
 	memcpy(eth->h_source,sourceMac,HADDR_LEN);
 	eth->h_proto = type;
 	memcpy(eth+1,data,strlen(data));
-    frame[MAC_HEADER_LEN+strlen(data)]='\0';
+	frame[MAC_HEADER_LEN+strlen(data)]='\0';
+	printf("Length of data is %c \n",frame[6]);
 	printf("FrameBufferUtility.c : The frame after building is %s \n",frame);
 }
 
@@ -48,13 +49,28 @@ char * MarshalledFramePayload(ODRFrame currentFrame) {
 }
 
 void breakFrame(char* sourceMac, char* destinationMac, char *data, void* buffer) {
-	ODRFrame currentFrame;
-	int i,dataSize;
-	int length = sizeof((char*)buffer);
-	dataSize = length - sizeof(sourceMac) - sizeof(destinationMac) - ETH_TYPE_LEN;
-	strncat(sourceMac, ((char*)buffer),HADDR_LEN);
-	strncat(destinationMac, ((char*)buffer)+HADDR_LEN,HADDR_LEN);
-	strncat(data, ((char*)buffer)+2 * HADDR_LEN + 2,dataSize);
+	ODRFrame breakFrame(char* currentFrame) {
+		/*The packet received will have the structure DestinationMacSourceMacPackettypePakcetLength(header)
+		 * PakcetType:::Hopcount:::BroadcastID:::souceIPaddr:::sourcePort:::DestIPAddr:::DestPort:::forceroute:::Message*/
+		ODRFrame receivedFrame;
+		char frameToken[FRAME_LENGTH];
+		memset(frameToken,'\0',FRAME_LENGTH);
+		struct ethhdr *eth;
+		eth = (struct ethhdr *)currentFrame;
+		int type = ntohs(eth->h_proto);
+		if(type != ETH_TYPE){
+			printf("We have received wrong packet with type %d \n",type);
+			printf("Program will exit\n");
+			exit(0);
+		}
+		memcpy(receivedFrame->header.destAddress,eth->h_dest,HADDR_LEN);
+		memcpy(receivedFrame->header.sourceAddress,eth->h_source,HADDR_LEN);
+		char* frameMessage = (char*)(eth+1);
+		strncpy(frameToken,frameMessage, strlen(frameMessage));
+
+
+		return receivedFrame;
+	}
 }
 
 
