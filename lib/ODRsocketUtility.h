@@ -23,9 +23,15 @@ struct interfacefInfo {
 
 }interfacefInfo ;
 
+typedef struct  {
+	char    sourceMac[HADDR_LEN];
+	int sockfd;
+}interfaceSock;
+
 typedef struct interfacefInfo  ifInfo;
 
 void createAndBindSocketsTOInterfaces(int** sockets, int* number);
+void  getSourceMacForInterface(int sockFd, char sourceMac[HADDR_LEN] );
 int createAndBindUDS();
 void getListOfInterfaces(ifInfo** ifList, int* size );
 struct sockaddr_ll getODRBindedSocket(int sockfd);

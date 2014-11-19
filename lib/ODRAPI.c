@@ -7,88 +7,95 @@
 
 
 #include "ODRAPI.h"
+#include "GenericUtility.h"
 
 
 
-
-char* marshallMessage(char source[INET_ADDRSTRLEN], char destination[INET_ADDRSTRLEN],int port, char* message, int forceRoute) {
-	char portStr[6], forceRouteStr[6];
+char* marshallMessage(DataPacket packet) {
+	char destPortStr[6], forceRouteStr[6], sourcePortStr[6];
 	char *temp = NULL;
-	intTochar(port,portStr);
-	intTochar(forceRoute,forceRouteStr);
-	int messageLength = 2*INET_ADDRSTRLEN + strlen(portStr) + strlen(message) + strlen(forceRouteStr) + 4*strlen(DELIMETER);
+	intTochar(packet.destinationPort,destPortStr);
+	intTochar(packet.forceRoute,forceRouteStr);
+	intTochar(packet.sourcePort,sourcePortStr);
+	int messageLength = 2*INET_ADDRSTRLEN + strlen(sourcePortStr) + strlen(destPortStr) + strlen(packet.message) + strlen(forceRouteStr) + 5*strlen(DELIMETER);
 	char*  marshelledMessage = (char*)malloc(messageLength*sizeof(char));
 	memset(marshelledMessage, '\0', messageLength*sizeof(char));
-	strncat(marshelledMessage,source,INET_ADDRSTRLEN);
+	strncat(marshelledMessage,packet.source,INET_ADDRSTRLEN);
 	strncat(marshelledMessage,DELIMETER, strlen(DELIMETER));
-	strncat(marshelledMessage,destination,INET_ADDRSTRLEN);
+	strncat(marshelledMessage,sourcePortStr,6);
 	strncat(marshelledMessage,DELIMETER, strlen(DELIMETER));
-	strncat(marshelledMessage,portStr,6);
+	strncat(marshelledMessage,packet.destination,INET_ADDRSTRLEN);
+	strncat(marshelledMessage,DELIMETER, strlen(DELIMETER));
+	strncat(marshelledMessage,destPortStr,6);
 	strncat( marshelledMessage,DELIMETER, strlen(DELIMETER));
 	strncat(marshelledMessage,forceRouteStr,strlen(forceRouteStr));
 	strncat( marshelledMessage, DELIMETER,strlen(DELIMETER));
-	strncat(marshelledMessage,message,strlen(message));
+	strncat(marshelledMessage,packet.message,strlen(packet.message));
 	printf("Marshelled message in marshalling is %s \n",marshelledMessage );
 	return marshelledMessage;
 }
 
-void unMarshallMessage(char* source, char* destination,int *port, char* message, char* marshelledMessage, int* forceRoute) {
+void unMarshallMessage(char* marshelledMessage, DataPacket *packet) {
 	char tokenMessage[MAXLINE];
 	memset(tokenMessage,'\0',MAXLINE);
 	//memset(message,'\0',MAXLINE);
 	printf("Marshalled Message in unmarshalling is %s \n",marshelledMessage);
 	strncpy(tokenMessage,marshelledMessage,  strlen(marshelledMessage));
 	printf("Token Message is %s \n",tokenMessage);
-	if(source!=NULL) {
-		strncpy(source,strtok(tokenMessage, DELIMETER), INET_ADDRSTRLEN);
-		printf("Source is %s \n", source);
-	}
-	else {
-			strtok(tokenMessage, DELIMETER);
-		}
 
-	if(destination!=NULL) {
-		strncpy(destination,strtok(NULL, DELIMETER), INET_ADDRSTRLEN);
-		printf("Destination is %s \n", destination);
-	}
-	else {
-		strtok(NULL, DELIMETER);
-	}
-	if(port!=NULL) {
-		*port = atoi(strtok(NULL, DELIMETER));
-		printf("port is %d \n", *port);
-	}
-	else {
-		strtok(NULL, DELIMETER);
-	}
-	if(forceRoute != NULL) {
-		*forceRoute = atoi(strtok(NULL, DELIMETER));
-		printf("forceRoute is %d \n", *forceRoute);
-	}
-	else {
-			strtok(NULL, DELIMETER);
-		}
-	if(message!=NULL) {
-		strncpy(message,strtok(NULL, DELIMETER),sizeof(message)-1);
-		printf("message is %s \n", message);
-	}
+	strncpy(packet->source,strtok(tokenMessage, DELIMETER), INET_ADDRSTRLEN);
+	printf("Source is %s \n", packet->source);
+
+	packet->sourcePort = atoi(strtok(NULL, DELIMETER));
+	printf("sourcePort is %d \n", packet->sourcePort);
+
+	strncpy(packet->destination,strtok(NULL, DELIMETER), INET_ADDRSTRLEN);
+	printf("Destination is %s \n", packet->destination);
+
+
+	packet->destinationPort = atoi(strtok(NULL, DELIMETER));
+	printf("Destination port is %d \n", packet->destinationPort);
+
+
+
+	packet->forceRoute = atoi(strtok(NULL, DELIMETER));
+
+
+	strncpy(packet->message,strtok(NULL, DELIMETER),FRAME_BUFFER_LENGTH);
+	printf("message is %s \n", packet->message);
+
 }
 
 
-int msg_send(int sockfd, char source[INET_ADDRSTRLEN], char destination[INET_ADDRSTRLEN],int port, char* message, int forceRoute ){
-	char* marshalledMessage = marshallMessage(source, destination,port, message,forceRoute);
+int msg_send(int sockfd, DataPacket packet){
+	char* marshalledMessage = marshallMessage(packet);
 	return write(sockfd , marshalledMessage , strlen(marshalledMessage));
 }
 
+int msg_sendTo(int sockfd, DataPacket packet, char fileName[FILE_NAME_LENGTH]){
+	char* marshalledMessage = marshallMessage(packet);
+	struct sockaddr_un fileSock;
+	fileSock.sun_family =  AF_LOCAL;
+	strncpy(fileSock.sun_path,fileName, FILE_NAME_LENGTH);
+	int returnValue =  sendto(sockfd , marshalledMessage , strlen(marshalledMessage),0,(SA*)&fileSock,sizeof(fileSock));
+	return returnValue;
+}
 
-int msg_recv(int sockfd,  char* message, char source[INET_ADDRSTRLEN],char destination[INET_ADDRSTRLEN], int *port, int* forceRoute){
+
+int msg_recv(int sockfd,  DataPacket *packet,struct sockaddr_un* cliaddr){
 	char marshelledMessage[MAXLINE];
 	memset(marshelledMessage, '\0',MAXLINE);
 	int charReturned;
-	if((charReturned =read(sockfd , marshelledMessage , MAXLINE )) <0) {
+	struct sockaddr_un sockAddr;
+	memset(&sockAddr, '\0',sizeof(sockAddr));
+	int sockAddrLength = sizeof(sockAddr);
+	if((charReturned =recvfrom(sockfd , marshelledMessage , MAXLINE,0,(SA*)&sockAddr,&sockAddrLength)) <0) {
 		perror("UnIX DOMAIN SOCKET READ FAILED :");
 		exit(0);
 	}
-	unMarshallMessage(source,destination, port,  message,marshelledMessage, forceRoute);
+	unMarshallMessage(marshelledMessage,packet);
+	if(cliaddr) {
+		*cliaddr = sockAddr;
+	}
 	return charReturned;
 }

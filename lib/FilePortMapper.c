@@ -18,17 +18,19 @@ void initializeportMap(int timeOut) {
 
 
 int generatePortNumber(char *fileName) {
-	removeTimeOutEntries();
+	//removeTimeOutEntries();
 	int isUniquePort =0;
 	while(!isUniquePort) {
 		int random = rand() % 2000;
+		printf("random port number is %d \n", random);
 		if(filePortMapHead == NULL) {
+			addEntry(random,fileName);
 			return random;
 		}
 		filePortMap* currentPosition = filePortMapHead;
 
 		while(currentPosition !=NULL) {
-			if(strncmp(fileName,currentPosition->fileName, FILE_NAME_LENGTH)) {
+			if(!strncmp(fileName,currentPosition->fileName, FILE_NAME_LENGTH)) {
 				return currentPosition->port;
 			}
 			if(currentPosition->port !=random)
@@ -38,6 +40,7 @@ int generatePortNumber(char *fileName) {
 			}
 		}
 		if(currentPosition==NULL)
+			addEntry(random,fileName);
 			return random;
 	}
 }
@@ -45,7 +48,7 @@ int generatePortNumber(char *fileName) {
 
 
 void addEntry(int port, char *fileName) {
-	removeTimeOutEntries();
+	//removeTimeOutEntries();
 	if(port <= 0 ) {
 		printf("Invalid Port Number \n");
 		exit(2);
@@ -72,13 +75,14 @@ void addEntry(int port, char *fileName) {
 
 	filePortMapTail->entryTime = time(NULL);
 	strncpy(filePortMapTail->fileName,fileName,FILE_NAME_LENGTH);
+	printf("FilePortMapper.c : File Path after adding entry is %s \n",filePortMapTail->fileName);
 	filePortMapTail->port= port;
 	filePortMapTail->next = NULL;
 	return ;
 }
 
 void deleteEntry(int port) {
-	removeTimeOutEntries();
+	//removeTimeOutEntries();
 	if(filePortMapHead == NULL)
 		return;
 	filePortMap* currentPosition = filePortMapHead;
@@ -130,25 +134,30 @@ void removeTimeOutEntries() {
 			currentPosition= currentPosition->next;
 			deleteEntry(portToDelete);
 		}
+		else {
+		currentPosition = currentPosition->next;
+		}
 	}
 }
 
 void getFileName(int port, char* fileName) {
-	removeTimeOutEntries();
+	//removeTimeOutEntries();
 	if(filePortMapHead == NULL)
 		return;
 	filePortMap* currentPosition = filePortMapHead;
 	while(currentPosition !=NULL) {
+		printf("FilePortMapper.c: file path is %s\n",currentPosition->fileName);
 		if(currentPosition->port == port) {
 			strncpy(fileName,currentPosition->fileName,FILE_NAME_LENGTH);
 			return;
 		}
+		currentPosition = currentPosition->next;
 	}
 	return;
 }
 
 int isEntryExistForPort(int port) {
-	removeTimeOutEntries();
+	//removeTimeOutEntries();
 	if(filePortMapHead == NULL)
 		return 0;
 	filePortMap* currentPosition = filePortMapHead;
@@ -156,6 +165,7 @@ int isEntryExistForPort(int port) {
 		if(currentPosition->port == port) {
 			return 1;
 		}
+		currentPosition = currentPosition->next;
 	}
 	return 0;
 }

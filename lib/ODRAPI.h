@@ -12,9 +12,11 @@
 #include "GenericUtility.h"
 #include "ODRConstants.h"
 
-int msg_send(int sockfd, char source[INET_ADDRSTRLEN], char destination[INET_ADDRSTRLEN],int port, char* message, int forceRoute );
-int msg_recv(int sockfd,  char* message, char source[INET_ADDRSTRLEN],char destination[INET_ADDRSTRLEN], int *port, int* forceRoute);
+int msg_send(int sockfd, DataPacket packet);
+int msg_recv(int sockfd,  DataPacket *packet,struct sockaddr_un* cliaddr);
+char* marshallMessage(DataPacket packet);
 
+int  msg_sendTo(int sockfd, DataPacket packet, char fileName[FILE_NAME_LENGTH]);
 
 
 #endif /* ODRAPI_H_ */

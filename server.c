@@ -8,6 +8,7 @@
 #include "unp.h"
 #include "lib/UDSUtility.h"
 #include "lib/AddressUtility.h"
+#include "lib/GenericUtility.h"
 
 
 void printRequest(char* clientIp) {
@@ -19,25 +20,23 @@ void printRequest(char* clientIp) {
 	printf("Server.c : server at node   %s  responding to request from   %s \n",localHostname,domainName);
 }
 
-
-
-
-
 int main (int argc, char* argv) {
 	int sockfd;
-	char clientMessage[MAXLINE];
-	char serverReply[MAXLINE];
-	char localServerAddress[INET_ADDRSTRLEN];
-	char clientIp[INET_ADDRSTRLEN];
-	int clientPort =0;
-	populateLocalAddress(localServerAddress);
+	DataPacket recvPacket, sendPacket;
+	populateLocalAddress(sendPacket.source);
 	sockfd = getServerBindedsocket();
-	//connectToODR(sockfd);
+	connectToODR(sockfd);
 	while(1) {
-		msg_recv(sockfd,clientMessage,clientIp,NULL,&clientPort, NULL);
-		printRequest(clientIp);
-		msg_send(sockfd,localServerAddress,clientIp,clientPort,clientMessage,0);
-		memset(clientMessage, '\0',MAXLINE);
+
+		msg_recv(sockfd,&recvPacket, NULL);
+		printRequest(recvPacket.source);
+		strncpy(sendPacket.source,recvPacket.destination,INET_ADDRSTRLEN);
+		sendPacket.sourcePort = recvPacket.destinationPort;
+		strncpy(sendPacket.destination,recvPacket.source,INET_ADDRSTRLEN);
+		sendPacket.destinationPort = recvPacket.sourcePort;
+		sendPacket.forceRoute = recvPacket.forceRoute;
+		strncpy(sendPacket.message,recvPacket.message,FRAME_BUFFER_LENGTH);
+		msg_send(sockfd,sendPacket);
 	}
 
 }

@@ -10,18 +10,10 @@
 
 #include "unp.h"
 #include "ODRConstants.h"
-
-typedef struct  {
-	char message[1500];
-	char source[INET_ADDRSTRLEN];
-	char destination[INET_ADDRSTRLEN];
-	int port;
-	int forceRoute;
-
-}DataPacket;
-
+#include "GenericUtility.h"
 
 void getListeningSet(fd_set *readSet,int *maxfd, int* ifSockets, int count, int UDSsocket);
 int getTimeOut(int argc, char*argv[]) ;
+DataPacket getData(int sockfd,struct sockaddr_un* cliaddr);
 
 #endif /* LIB_ODRUTILITY_H_ */

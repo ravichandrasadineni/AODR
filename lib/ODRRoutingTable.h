@@ -12,7 +12,8 @@
 #include "ODRConstants.h"
 
 struct ODRrouteEntry {
-	char destinationAddress[HADDR_LEN];
+	char destinationMACAddress[HADDR_LEN];
+	char destinationIPAddress[INET_ADDRSTRLEN];
 	int socketId;
 	int hopcount;
 	time_t timeCreated;
@@ -22,12 +23,12 @@ struct ODRrouteEntry {
 typedef struct ODRrouteEntry routeEntry;
 
 void setExpiryTimeForRoutingTable(int secs);
-void addRoute(char destinationAddress[HADDR_LEN], int interfaceId,int hopcount);
-int getHopCountIfRouteExist(char destinationAddress[HADDR_LEN]);
-int getOutInfForDest(char destinationAddress[HADDR_LEN]);
+void addRoute(char destinationAddress[HADDR_LEN],char destinationIPAddress[INET_ADDRSTRLEN], int socketId,int hopcount);
+void populateDestMacAddressForRoute(char destinationAddress[INET_ADDRSTRLEN], char destMacAddress [HADDR_LEN]);
+int getHopCountIfRouteExist(char destinationAddress[INET_ADDRSTRLEN]);
+int getOutInfForDest(char destinationAddress[INET_ADDRSTRLEN]);
+int getHopCountForROute(char destinationAddress[INET_ADDRSTRLEN]);
 void deleteTimeoutEnries();
-int doesRouteExist(char destinationAddress[HADDR_LEN]);
-
-
+int doesRouteExist(char destinationAddress[INET_ADDRSTRLEN]);
 
 #endif /* LIB_ODRROUTINGTABLE_H_ */

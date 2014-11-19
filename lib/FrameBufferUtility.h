@@ -4,7 +4,7 @@
  *  Created on: Nov 9, 2014
  *      Author: ravichandrasadineni
  */
-
+#include "ODRAPI.h"
 #ifndef LIB_FRAMEBUFFERUTILITY_H_
 #define LIB_FRAMEBUFFERUTILITY_H_
 #include "MemoryAllocator.h"
@@ -13,8 +13,8 @@
 #include<stdlib.h>
 #include<stdio.h>
 
-void breakBuffer(char* sourceMac, char* destinationMac, char *data, void* buffer);
-void buildBuffer(char* sourceMac, char* destinationMac, char *data, void* buffer);
+
+
 typedef struct {
 	int packetType;
 	int Broadcastid;
@@ -24,7 +24,12 @@ typedef struct {
 }ODRHeader;
 
 typedef struct{
-	ODRHeader *header;
-	char *payload;
-}ODRPacket;
+	ODRHeader header;
+	DataPacket data;
+}ODRFrame;
+char* buildRREQ(ODRFrame currentFrame);
+char* buildRREP(ODRFrame currentFrame);
+char* buildMessageFrame(ODRFrame currentFrame);
+
+
 #endif /* LIB_FRAMEBUFFERUTILITY_H_ */

@@ -6,11 +6,29 @@
  */
 #include "ODRsocketUtility.h"
 
+int sockInfMapsize =0;
+interfaceSock sockToInfMapper[10];
 
-int isEth0(char* name) {
+void  getSourceMacForInterface(int sockFd, char sourceMac[HADDR_LEN] ) {
+	int i=0;
+	memset(sourceMac,'\0',HADDR_LEN);
+	for(i=0; i < sockInfMapsize; i++) {
+		if(sockToInfMapper[i].sockfd == sockFd) {
+			strncpy(sourceMac,sockToInfMapper[i].sourceMac,HADDR_LEN);
+			return;
+		}
+	}
+
+}
+
+int isEth0OrLoopback(char* name) {
 	if(!strncmp(ETHERNET0,name,16)) {
 		return 1;
 	}
+	if(!strncmp(LOOPBACKIF,name,16)) {
+		return 1;
+	}
+
 	return 0;
 }
 
@@ -34,7 +52,7 @@ void getListOfInterfaces(ifInfo** ifList, int* size ) {
 	(*size)=0;
 	ifInfo* currentPosition;
 	for (hwahead = hwa = Get_hw_addrs(); hwa != NULL; hwa = hwa->hwa_next) {
-		if (isEth0(hwa->if_name)) {
+		if (isEth0OrLoopback(hwa->if_name)) {
 			continue;
 		}
 		if((*ifList) == NULL) {
@@ -63,6 +81,7 @@ void createAndBindSocketsTOInterfaces(int** sockets, int* number) {
 		int sockfd = createNewSocket();
 		struct sockaddr_ll sADDR;
 		memset(&sADDR,'\0', sizeof(sADDR));
+		printf("The interface is %d \n", ifList->if_index );
 		sADDR.sll_ifindex =ifList->if_index ;
 		sADDR.sll_halen = ETH_ALEN;
 		sADDR.sll_protocol = htons(ETH_TYPE);
@@ -71,6 +90,9 @@ void createAndBindSocketsTOInterfaces(int** sockets, int* number) {
 			perror("BINDING SOCKET TO INTERFACE FAILED :");
 			exit(1);
 		}
+		sockToInfMapper[size].sockfd = sockfd;
+		sockInfMapsize++;
+		strncpy(sockToInfMapper[size].sourceMac,ifList->if_haddr,6);
 		(*sockets)[i]= sockfd;
 		ifList = ifList->next;
 	}

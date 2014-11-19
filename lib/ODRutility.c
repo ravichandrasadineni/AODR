@@ -19,13 +19,14 @@ void getListeningSet(fd_set *readSet,int *maxfd, int* ifSockets, int count, int 
 
 	FD_SET(UDSsocket, readSet);
 	*maxfd = MAX(*maxfd,UDSsocket);
+	*maxfd = *maxfd+1;
 	return;
 }
 
 
-DataPacket getData(int sockfd)  {
+DataPacket getData(int sockfd,struct sockaddr_un* cliaddr)  {
 	DataPacket newDataPacket;
-	msg_recv(sockfd,  newDataPacket.message, newDataPacket.source, newDataPacket.destination, &(newDataPacket.port), &(newDataPacket.forceRoute));
+	msg_recv(sockfd,  &newDataPacket, cliaddr);
 	return newDataPacket;
 
 }

@@ -13,7 +13,7 @@ routeEntry *routeTableHead =NULL, *routeTableTail =NULL;
 void setExpiryTimeForRoutingTable(int secs) {
 	timeout_secs = secs;
 }
-void addRoute(char destinationAddress[HADDR_LEN], int socketId,int hopcount) {
+void addRoute(char destinationAddress[HADDR_LEN],char destinationIPAddress[INET_ADDRSTRLEN],  int socketId,int hopcount) {
 	if(routeTableHead == NULL) {
 		routeTableHead= (routeEntry*)allocate_void(sizeof(routeEntry));
 		routeTableTail = routeTableHead;
@@ -29,8 +29,9 @@ void addRoute(char destinationAddress[HADDR_LEN], int socketId,int hopcount) {
 	routeTableTail->next = NULL;
 	routeTableTail->socketId = socketId;
 	routeTableTail->hopcount = hopcount;
+	strncpy(routeTableTail->destinationIPAddress,destinationIPAddress,INET_ADDRSTRLEN);
 	routeTableTail->timeCreated = time(NULL);
-	strncpy(routeTableTail->destinationAddress,destinationAddress,HADDR_LEN);
+	strncpy(routeTableTail->destinationMACAddress,destinationAddress,HADDR_LEN);
 }
 
 void deleteRouteEntry(routeEntry* currentPosition, routeEntry* prevPosition ) {
@@ -86,14 +87,14 @@ void deleteTimeoutEnries() {
 	}
 }
 
-int doesRouteExist(char destinationAddress[HADDR_LEN]) {
+int doesRouteExist(char destinationAddress[INET_ADDRSTRLEN]) {
 	routeEntry* currentPosition = routeTableHead;
 	if(routeTableHead == NULL) {
 		return 0;
 	}
 	else  {
 		while(currentPosition != NULL) {
-			if(strncmp(currentPosition->destinationAddress,destinationAddress,6)) {
+			if(strncmp(currentPosition->destinationIPAddress,destinationAddress,6)) {
 
 				return 1;
 
@@ -105,14 +106,14 @@ int doesRouteExist(char destinationAddress[HADDR_LEN]) {
 	return 0;
 }
 
-int getOutInfForDest(char destinationAddress[HADDR_LEN]) {
+int getOutInfForDest(char destinationAddress[INET_ADDRSTRLEN]) {
 	routeEntry* currentPosition = routeTableHead;
 	if(routeTableHead == NULL) {
 		return 0;
 	}
 	else  {
 		while(currentPosition != NULL) {
-			if(strncmp(currentPosition->destinationAddress,destinationAddress,6)) {
+			if(strncmp(currentPosition->destinationIPAddress,destinationAddress,6)) {
 				return currentPosition->socketId;
 
 			}
@@ -123,6 +124,43 @@ int getOutInfForDest(char destinationAddress[HADDR_LEN]) {
 	return 0;
 }
 
+
+int getHopCountForROute(char destinationAddress[INET_ADDRSTRLEN]) {
+	routeEntry* currentPosition = routeTableHead;
+	if(routeTableHead == NULL) {
+		return 0;
+	}
+	else  {
+		while(currentPosition != NULL) {
+			if(strncmp(currentPosition->destinationIPAddress,destinationAddress,6)) {
+				return currentPosition->hopcount;
+
+			}
+			currentPosition = currentPosition->next;
+		}
+	}
+	return 0;
+}
+
+
+ void populateDestMacAddressForRoute(char destinationAddress[INET_ADDRSTRLEN], char destMacAddress [HADDR_LEN]) {
+	routeEntry* currentPosition = routeTableHead;
+	if(routeTableHead == NULL) {
+		return ;
+	}
+	else  {
+		while(currentPosition != NULL) {
+			if(strncmp(currentPosition->destinationIPAddress,destinationAddress,6)) {
+				strncpy(destMacAddress,currentPosition->destinationMACAddress,6);
+
+			}
+			currentPosition = currentPosition->next;
+		}
+	}
+
+	return;
+}
+
 int getHopCountIfRouteExist(char destinationAddress[HADDR_LEN]) {
 	routeEntry* currentPosition = routeTableHead;
 	if(routeTableHead == NULL) {
@@ -130,7 +168,7 @@ int getHopCountIfRouteExist(char destinationAddress[HADDR_LEN]) {
 	}
 	else  {
 		while(currentPosition != NULL) {
-			if(strncmp(currentPosition->destinationAddress,destinationAddress,6)) {
+			if(strncmp(currentPosition->destinationMACAddress,destinationAddress,6)) {
 				return currentPosition->hopcount;
 
 			}

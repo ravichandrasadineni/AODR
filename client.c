@@ -30,54 +30,51 @@ void printMessageSend(char* userchoice) {
 
 
 int main(int argc, char*argv[]) {
-
+	DataPacket sendingPacket, recievingPacket;
 	char userchoice[5];
-	char serverIpAddress[INET_ADDRSTRLEN];
+
 	int clientSocket;
-	char serverReply[MAXLINE];
-	char clientMessage[MAXLINE];
-	char localclientIp[INET_ADDRSTRLEN];
 	struct timeval tv;
 	int maxfd=0;
 	fd_set readSet;
-	int forceRoute =0;
+
 	int isRetransmitted = 0;
-	strncpy(clientMessage,MESSAGE, strlen(MESSAGE));
-	populateLocalAddress(localclientIp);
+	strncpy(sendingPacket.message,MESSAGE, strlen(MESSAGE));
+	populateLocalAddress(sendingPacket.source);
 	while(1) {
 		FD_ZERO (&readSet);
 		getUserChoice(userchoice);
-		getIpAddressFromDomainName(userchoice,serverIpAddress);
-		printf("IP Address is %s \n", serverIpAddress);
+		getIpAddressFromDomainName(userchoice,sendingPacket.destination);
+		printf("client.c : server IP Address is %s \n", sendingPacket.destination);
 		clientSocket = getclientBindedsocket();
-		//connectToODR(clientSocket);
-
-		connectToTimeClientServer(clientSocket);
+		connectToODR(clientSocket);
 		maxfd = clientSocket + 1;
-		while(1) {
+		//while(1) {
 			FD_SET(clientSocket,&readSet);
 			tv.tv_sec = 2;
 			tv.tv_usec = 0;
-			msg_send(clientSocket,localclientIp,serverIpAddress,TIME_SERVER_PORT,clientMessage,forceRoute);
+			sendingPacket.destinationPort = TIME_SERVER_PORT;
+
+			msg_send(clientSocket,sendingPacket);
 			if((select(maxfd,&readSet,NULL,NULL,&tv))<0) {
 				perror("Select in the client Failed :");
 			}
 			if(FD_ISSET(clientSocket,&readSet)) {
-				msg_recv(clientSocket,serverReply,NULL,NULL,NULL,NULL);
+				msg_recv(clientSocket,&recievingPacket,NULL);
 				printRecievedMessage(userchoice);
 				break;
 			}
 			else {
 				if(isRetransmitted) {
-					forceRoute = 0;
+					sendingPacket.forceRoute = 0;
 				}
 				else {
 					isRetransmitted = 1;
-					forceRoute = 1;
+					sendingPacket.forceRoute = 1;
 				}
 				printTimeoutMessage(userchoice);
 			}
-		}
+		//}
 		isRetransmitted =0;
 		unLinkSocket(clientSocket);
 		close(clientSocket);

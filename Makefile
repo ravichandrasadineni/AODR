@@ -26,12 +26,12 @@ CC = gcc
 
 LIBS = -lresolv -lnsl -pthread -lm unpv13e/libunp.a 
 	
-FLAGS = -g -O0
+FLAGS = -O0 -ggdb
 
 CFLAGS = ${FLAGS} -I unpv13e/lib
 all: client  server ODR
 
-OBJECTS=AddressUtility.o GenericUtility.o ODRAPI.o UDSUtility.o MemoryAllocator.o ODRsocketUtility.o FilePortMapper.o get_hw_addrs.o BroadcastMap.o ODRutility.o ODRRoutingTable.o
+OBJECTS=AddressUtility.o GenericUtility.o ODRAPI.o UDSUtility.o MemoryAllocator.o ODRsocketUtility.o FilePortMapper.o get_hw_addrs.o BroadcastMap.o ODRutility.o ODRRoutingTable.o ODRDataPacketManager.o FrameSendRecvUtility.o FrameBufferUtility.o
 
 
 client: client.o $(OBJECTS)
@@ -83,8 +83,18 @@ BroadcastMap.o: lib/BroadcastMap.c
 ODRRoutingTable.o: lib/ODRRoutingTable.c
 	${CC} ${CFLAGS} -c lib/ODRRoutingTable.c
 	
+ODRDataPacketManager.o: lib/ODRDataPacketManager.c
+	${CC} ${CFLAGS} -c lib/ODRDataPacketManager.c
+	
 get_hw_addrs.o: lib/Asgn3_code/get_hw_addrs.c
 	${CC} ${CFLAGS} -c lib/Asgn3_code/get_hw_addrs.c
+
+FrameSendRecvUtility.o: lib/FrameSendRecvUtility.c
+	${CC} ${CFLAGS} -c lib/FrameSendRecvUtility.c
+
+FrameBufferUtility.o: lib/FrameBufferUtility.c
+	${CC} ${CFLAGS} -c lib/FrameBufferUtility.c
+
 
 
 
