@@ -32,14 +32,14 @@ char * MarshalledFramePayload(ODRFrame currentFrame) {
 	sprintf(hopcount,"%d",currentFrame.header.hopcount);
 	sprintf(brodcastId,"%d",currentFrame.header.Broadcastid);
 	printf("FrameBufferUtility.c : packettype value is %d\n",currentFrame.header.packetType);
-	frame[0] = currentFrame.header.packetType;
+	sprintf(frame,"%d",currentFrame.header.packetType);
 	strncat(frame,DELIMETER, strlen(DELIMETER));
 	strncat(frame,hopcount,HOPCOUNT_LENGTH);
 	strncat(frame,DELIMETER, strlen(DELIMETER));
 	strncat(frame,brodcastId,BRODCAST_ID_LENGTH);
 	strncat(frame,DELIMETER, strlen(DELIMETER));
 	strncat(frame,data,strlen(data));
-	printf("frame is %s \n", frame);
+	printf("FrameBufferUtility.c : Frame is %s \n", frame);
 	free(data);
 	return frame;
 }
@@ -59,7 +59,7 @@ char* buildRREQ(ODRFrame currentFrame){
 	currentFrame.header.packetType = 0;
 	char* frame = allocate_strmem(FRAME_LENGTH);
 	char* dataPayLoad = MarshalledFramePayload(currentFrame);
-	printf("FrameBufferUtility.c : The source addresss is %s Destination address is %s\n",currentFrame.header.sourceAddress,currentFrame.header.destAddress);
+	printf("FrameBufferUtility.c : The source address is %s Destination address is %s\n",currentFrame.header.sourceAddress,currentFrame.header.destAddress);
 	buildFrame(currentFrame.header.sourceAddress, currentFrame.header.destAddress, dataPayLoad,frame);
 	free(dataPayLoad);
 	return frame;
