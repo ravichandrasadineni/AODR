@@ -48,23 +48,31 @@ int main(int argc,char *argv[]){
 			char *newFrame = allocate_strmem(FRAME_LENGTH);
 			recv_rawpacket(setSocket,newFrame);
 			ODRFrame currentFrame = breakFrame(newFrame);
-			//Adding Source Route To RoutingTable
-			addRoute(currentFrame.header.sourceAddress,currentFrame.data.source,setSocket,currentFrame.header.hopcount,currentFrame.data.forceRoute);
+
 			//Increasing HopCount
 			currentFrame.header.hopcount +=1;
 
 
 
 			if(currentFrame.header.packetType == PACKET_RREQ) {
+
 				handleRREQ(currentFrame);
 			}
 			else if (currentFrame.header.packetType ==  PACKET_RREP) {
-				handleRREP(currentFrame,setSocket,ifSockets,numOFInf);
-			}
+				handleRREQ(currentFrame,setSocket,ifSockets,numOFInf);
 
-//			else if (currentFrame.header.packetType ==  PACKET_RREP)  {
-//				handleDataPacket(currentFrame);
-//			}
+			}
+			//			else if (currentFrame.header.packetType ==  PACKET_RREP) {
+			//				handleRREP(currentFrame);
+			//			}
+
+			//			else if (currentFrame.header.packetType ==  PACKET_RREP)  {
+			//				handleDataPacket(currentFrame);
+			//			}
+			//Adding Source Route To RoutingTable
+			printf("ODR.C: Set socket is %d \n",setSocket);
+			addRoute(currentFrame.header.sourceAddress,currentFrame.data.source,setSocket,currentFrame.header.hopcount,currentFrame.data.forceRoute);
+
 		}
 
 

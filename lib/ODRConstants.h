@@ -7,7 +7,6 @@
 
 #ifndef ODRCONSTANTS_H_
 #define ODRCONSTANTS_H_
-
 #define TIME_SERVER "/tmp/rsadineni-timeServer"
 #define ODR_SERVER "/tmp/rsadineni-odrServer"
 #define ODR_CLIENT_PRE "/tmp/file-XXXXXX"
@@ -30,4 +29,5 @@
 #define HOPCOUNT_LENGTH 2
 #define PACKETTYPE_LENGTH 1
 #define RREPSENT_LENGTH 1
+static const char BRODCAST_MAC[HADDR_LEN] = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
 #endif /* ODRCONSTANTS_H_ */

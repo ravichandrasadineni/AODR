@@ -23,8 +23,6 @@ void buildFrame(char* sourceMac, char* destinationMac, char *data, char* frame) 
 	eth->h_proto = type;
 	memcpy(eth+1,data,strlen(data));
 	frame[MAC_HEADER_LEN+strlen(data)]='\0';
-	printf("Length of data is %c \n",frame[6]);
-	printf("FrameBufferUtility.c : The frame after building is %s \n",frame);
 }
 
 char * MarshalledFramePayload(ODRFrame currentFrame) {
@@ -36,7 +34,6 @@ char * MarshalledFramePayload(ODRFrame currentFrame) {
 	sprintf(hopcount,"%d",currentFrame.header.hopcount);
 	sprintf(brodcastId,"%d",currentFrame.header.Broadcastid);
 	sprintf(rrepsent,"%d", currentFrame.header.RREPSent);
-	printf("FrameBufferUtility.c : packettype value is %d\n",currentFrame.header.packetType);
 	sprintf(frame,"%d",currentFrame.header.packetType);
 	strncat(frame,DELIMETER, strlen(DELIMETER));
 	strncat(frame,hopcount,HOPCOUNT_LENGTH);
@@ -46,7 +43,6 @@ char * MarshalledFramePayload(ODRFrame currentFrame) {
 	strncat(frame,rrepsent, strlen(rrepsent));
 	strncat(frame,DELIMETER, strlen(DELIMETER));
 	strncat(frame,data,strlen(data));
-	printf("FrameBufferUtility.c : Frame is %s \n", frame);
 	free(data);
 	return frame;
 }

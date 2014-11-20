@@ -11,7 +11,6 @@ int timeOutSecs =0;
 int CURRENT_BRODCAST_ID= 0;
 DataPacket parkingBuffer[DATAPACKET_BUFFER_SIZE];
 int currentParkingBufferSize =0;
-char BRODCAST_MAC[HADDR_LEN] = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
 void intializeBufferTimeOut(int timeOut) {
 	timeOutSecs = timeOut;
 }
