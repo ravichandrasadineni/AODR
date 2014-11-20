@@ -65,9 +65,14 @@ int main(int argc,char *argv[]){
 			//				handleDataPacket(currentFrame);
 			//			}
 			//Adding Source Route To RoutingTable
-			printf("ODR.C: Set socket is %d \n",setSocket);
-			addRoute(currentFrame.header.sourceAddress,currentFrame.data.source,setSocket,currentFrame.header.hopcount,currentFrame.data.forceRoute);
-
+			if(currentFrame.header.packetType == PACKET_RREQ) {
+				if(!isObselete(currentFrame.data.source,currentFrame.header.Broadcastid)) {
+					addRoute(currentFrame.header.sourceAddress,currentFrame.data.source,setSocket,currentFrame.header.hopcount-1,currentFrame.data.forceRoute);
+				}
+			}
+			else {
+				addRoute(currentFrame.header.sourceAddress,currentFrame.data.source,setSocket,currentFrame.header.hopcount-1,currentFrame.data.forceRoute);
+			}
 		}
 
 
