@@ -10,6 +10,7 @@
 
 #include "GenericUtility.h"
 #include "ODRConstants.h"
+#include "AddressUtility.h"
 
-
+void handleRREQ(ODRFrame currentFrame, int listenedSocket, int *ifSockets,int numOFInf);
 #endif /* LIB_ODRREQMANAGER_H_ */

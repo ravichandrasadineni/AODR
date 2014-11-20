@@ -23,6 +23,26 @@ void getListeningSet(fd_set *readSet,int *maxfd, int* ifSockets, int count, int 
 	return;
 }
 
+void sendRREQonOtherInterfaces(ODRFrame currentFrame, int listenedSocket,int *ifSockets,int numOFInf ) {
+	int i;
+	for (i=0; i <numOFInf; i++) {
+		if(ifSockets[i]!= listenedSocket) {
+			getSourceMacForInterface( ifSockets[i],  currentFrame.header.sourceAddress);
+			printf("ODRDataPacketManager.c  : Source Mac Address is : ");
+			printMacAddress(currentFrame.header.sourceAddress);
+			printf("ODRDataPacketManager.c  : Destination Mac Address is :");
+			printMacAddress(currentFrame.header.destAddress);
+			char* frame = buildRREQ(currentFrame);
+			send_rawpacket(ifSockets[i], frame);
+			printf("ODRDataPacketManager.c  :FRAME SENT IS  %s \n",frame);
+			free(frame);
+		}
+	}
+
+}
+void sendRREQonAllInterfaces(ODRFrame currentFrame, int *ifSockets,int numOfInf) {
+	sendRREQonOtherInterfaces(currentFrame,-1,ifSockets, numOfInf);
+}
 
 DataPacket getData(int sockfd,struct sockaddr_un* cliaddr)  {
 	DataPacket newDataPacket;

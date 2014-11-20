@@ -54,9 +54,9 @@ int main(int argc,char *argv[]){
 			//Increasing HopCount
 			currentFrame.header.hopcount +=1;
 
-//			if(currentFrame.header.packetType == PACKET_RREQ) {
-//				handleRREQ(currentFrame);
-//			}
+			if(currentFrame.header.packetType == PACKET_RREQ) {
+				handleRREQ(currentFrame,setSocket);
+			}
 //			else if (currentFrame.header.packetType ==  PACKET_RREP) {
 //				handleRREP(currentFrame);
 //			}

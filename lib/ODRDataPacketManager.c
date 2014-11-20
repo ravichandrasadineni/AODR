@@ -57,17 +57,7 @@ void sendDataPacket(DataPacket packet,int udsSocket,int *ifSockets,int numOFInf)
 			currentFrame.header.Broadcastid = CURRENT_BRODCAST_ID;
 			currentFrame.header.RREPSent = 0;
 			int i;
-			for(i=0;i<numOFInf;i++) {
-				getSourceMacForInterface( ifSockets[i],  currentFrame.header.sourceAddress);
-				printf("ODRDataPacketManager.c  : Source Mac Address is : ");
-				printMacAddress(currentFrame.header.sourceAddress);
-				printf("ODRDataPacketManager.c  : Destination Mac Address is :");
-				printMacAddress(currentFrame.header.destAddress);
-				char* frame = buildRREQ(currentFrame);
-				send_rawpacket(ifSockets[i], frame);
-				printf("ODRDataPacketManager.c  :FRAME SENT IS  %s \n",frame);
-				free(frame);
-			}
+			sendRREQonAllInterfaces(currentFrame,ifSockets,numOFInf);
 			CURRENT_BRODCAST_ID++;
 		}
 	}
