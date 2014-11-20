@@ -40,9 +40,8 @@ void handleRREP(ODRFrame currentFrame){
 		sendPacketWaitingInBuffer();
 	}
 	else if(canForwardRREP(currentFrame)){
-		ODRFrame *frametoSend = &currentFrame;
 		int outSocket = getOutInfForDest(currentFrame.data.destination);
-		send_rawpacket(outSocket,(char *)frametoSend);
+		send_rawpacket(outSocket,(char *)&currentFrame);
 
 	}
 	else if(shouldSendRREQ(currentFrame)){
