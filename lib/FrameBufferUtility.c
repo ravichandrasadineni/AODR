@@ -43,7 +43,7 @@ char * MarshalledFramePayload(ODRFrame currentFrame) {
 	strncat(frame,DELIMETER, strlen(DELIMETER));
 	strncat(frame,brodcastId,BRODCAST_ID_LENGTH);
 	strncat(frame,DELIMETER, strlen(DELIMETER));
-	srtncat(frame,rrepsent, strlen(rrepsent));
+	strncat(frame,rrepsent, strlen(rrepsent));
 	strncat(frame,DELIMETER, strlen(DELIMETER));
 	strncat(frame,data,strlen(data));
 	printf("FrameBufferUtility.c : Frame is %s \n", frame);
@@ -72,6 +72,7 @@ ODRFrame breakFrame(char* currentFrame) {
 	receivedFrame.header.packetType = atoi(strtok(frameMessage, DELIMETER));
 	receivedFrame.header.hopcount = atoi(strtok(NULL, DELIMETER));
 	receivedFrame.header.Broadcastid = atoi(strtok(NULL, DELIMETER));
+	receivedFrame.header.RREPSent = atoi(strtok(NULL,DELIMETER));
 	strncpy(receivedFrame.data.source,strtok(NULL, DELIMETER), INET_ADDRSTRLEN);
 	receivedFrame.data.sourcePort = atoi(strtok(NULL, DELIMETER));
 	strncpy(receivedFrame.data.destination,strtok(NULL, DELIMETER), INET_ADDRSTRLEN);

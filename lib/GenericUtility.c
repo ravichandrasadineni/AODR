@@ -39,11 +39,12 @@ void printFrame (ODRFrame receivedFrame) {
 	printf("PACKET TYPE :%d \n",receivedFrame.header.packetType);
 	printf("HOP COUNT:%d \n",receivedFrame.header.hopcount);
 	printf("BROADCAST ID:%d \n",receivedFrame.header.Broadcastid);
+	printf("IS RREPSENT :%d \n",receivedFrame.header.RREPSent);
 	printf("SOURCE IP:%s \n",receivedFrame.data.source);
 	printf("Destination IP:%s \n",receivedFrame.data.destination);
 	printf("Source Port:%d \n",receivedFrame.data.sourcePort);
 	printf("Destination Port:%d \n",receivedFrame.data.destinationPort);
-	printf("Fource Route :%d \n",receivedFrame.data.forceRoute);
+	printf("Force Route :%d \n",receivedFrame.data.forceRoute);
 	printf("Message:%s \n",receivedFrame.data.message);
 
 }
