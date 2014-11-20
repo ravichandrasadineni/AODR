@@ -82,7 +82,7 @@ void removeParkedPacket(int i) {
 	currentParkingBufferSize--;
 }
 
-void sendPacketWaitingInBuffer(int udsSocket,int *ifSockets,int numOFInf)  {
+void sendPacketWaitingInBuffer()  {
 	int i;
 	for(i=0; i<currentParkingBufferSize; ){
 		DataPacket currentParkedPacket;

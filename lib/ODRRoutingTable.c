@@ -37,7 +37,7 @@ void printRoutingTable() {
 
 
 
-void addRoute(char destinationMACAddress[HADDR_LEN],char destinationIPAddress[INET_ADDRSTRLEN],  int socketId,int hopcount) {
+void addRoute(char destinationMACAddress[HADDR_LEN],char destinationIPAddress[INET_ADDRSTRLEN],  int socketId,int hopcount, int forceroute) {
 	deleteTimeoutEnries();
 	printf("Before adding Route \n");
 	printRoutingTable();
@@ -46,11 +46,16 @@ void addRoute(char destinationMACAddress[HADDR_LEN],char destinationIPAddress[IN
 		routeTableTail = routeTableHead;
 	}
 	else {
-		int currentHopCount = getHopCountIfRouteExist(destinationIPAddress);
-		if((currentHopCount >= 0)&&(currentHopCount <hopcount)) {
-			return;
+		if(forceroute == 1){
+			deleteRoute(destinationIPAddress);
 		}
-		deleteRoute(destinationIPAddress);
+		else{
+			int currentHopCount = getHopCountIfRouteExist(destinationIPAddress);
+			if((currentHopCount >= 0)&&(currentHopCount <hopcount)) {
+				return;
+			}
+			deleteRoute(destinationIPAddress);
+		}
 		if(routeTableTail == NULL) {
 			routeTableHead= (routeEntry*)allocate_void(sizeof(routeEntry));
 			routeTableTail = routeTableHead;

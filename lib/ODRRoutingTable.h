@@ -23,7 +23,7 @@ struct ODRrouteEntry {
 typedef struct ODRrouteEntry routeEntry;
 
 void setExpiryTimeForRoutingTable(int secs);
-void addRoute(char destinationAddress[HADDR_LEN],char destinationIPAddress[INET_ADDRSTRLEN], int socketId,int hopcount);
+void addRoute(char destinationMACAddress[HADDR_LEN],char destinationIPAddress[INET_ADDRSTRLEN],  int socketId,int hopcount, int forceroute);
 void populateDestMacAddressForRoute(char destinationAddress[INET_ADDRSTRLEN], char destMacAddress [HADDR_LEN]);
 int getHopCountIfRouteExist(char destinationAddress[INET_ADDRSTRLEN]);
 int getOutInfForDest(char destinationAddress[INET_ADDRSTRLEN]);
