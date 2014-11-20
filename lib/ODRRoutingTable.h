@@ -29,6 +29,7 @@ int getHopCountIfRouteExist(char destinationAddress[INET_ADDRSTRLEN]);
 int getOutInfForDest(char destinationAddress[INET_ADDRSTRLEN]);
 int getHopCountForROute(char destinationAddress[INET_ADDRSTRLEN]);
 void deleteTimeoutEnries();
+void deleteRoute(char destinationIPAddress[INET_ADDRSTRLEN]);
 int doesRouteExist(char destinationAddress[INET_ADDRSTRLEN]);
 
 #endif /* LIB_ODRROUTINGTABLE_H_ */

@@ -10,6 +10,7 @@
 int timeout_secs = 0;
 routeEntry *routeTableHead =NULL, *routeTableTail =NULL;
 
+void deleteRouteEntry(routeEntry* currentPosition, routeEntry* prevPosition );
 void setExpiryTimeForRoutingTable(int secs) {
 	timeout_secs = secs;
 }
@@ -25,9 +26,10 @@ void printRoutingTable() {
 			printf("%s \t",currentPosition->destinationIPAddress);
 			printf("%d \t",currentPosition->hopcount);
 			printf("%d \t",currentPosition->socketId);
+			printf("%.24s \t",ctime(&currentPosition->timeCreated));
 			printMacAddress(currentPosition->destinationMACAddress);
+			currentPosition = currentPosition->next;
 		}
-		currentPosition = currentPosition->next;
 	}
 
 }
@@ -36,6 +38,7 @@ void printRoutingTable() {
 
 
 void addRoute(char destinationMACAddress[HADDR_LEN],char destinationIPAddress[INET_ADDRSTRLEN],  int socketId,int hopcount) {
+	deleteTimeoutEnries();
 	printf("Before adding Route \n");
 	printRoutingTable();
 	if(routeTableHead == NULL) {
@@ -43,26 +46,56 @@ void addRoute(char destinationMACAddress[HADDR_LEN],char destinationIPAddress[IN
 		routeTableTail = routeTableHead;
 	}
 	else {
-		int currentHopCount = getHopCountIfRouteExist(destinationMACAddress);
-		if((currentHopCount > 0)&&(currentHopCount <hopcount)) {
+		int currentHopCount = getHopCountIfRouteExist(destinationIPAddress);
+		if((currentHopCount >= 0)&&(currentHopCount <hopcount)) {
 			return;
 		}
-		routeTableTail->next = (routeEntry*)allocate_void(sizeof(routeEntry));
-		routeTableTail = routeTableTail->next;
+		deleteRoute(destinationIPAddress);
+		if(routeTableTail == NULL) {
+			routeTableHead= (routeEntry*)allocate_void(sizeof(routeEntry));
+			routeTableTail = routeTableHead;
+		}
+		else {
+			routeTableTail->next = (routeEntry*)allocate_void(sizeof(routeEntry));
+			routeTableTail = routeTableTail->next;
+		}
+
 	}
 	routeTableTail->next = NULL;
 	routeTableTail->socketId = socketId;
 	routeTableTail->hopcount = hopcount;
 	strncpy(routeTableTail->destinationIPAddress,destinationIPAddress,INET_ADDRSTRLEN);
 	routeTableTail->timeCreated = time(NULL);
-	strncpy(routeTableTail->destinationMACAddress,destinationMACAddress,HADDR_LEN);
+	memcpy(routeTableTail->destinationMACAddress,destinationMACAddress,HADDR_LEN);
 	printf("After adding Route \n");
 	printRoutingTable();
 
 }
 
+
+void deleteRoute(char destinationIPAddress[INET_ADDRSTRLEN]) {
+	routeEntry* currentPosition = routeTableHead;
+	routeEntry* prevPosition  = NULL;
+	if(routeTableHead == NULL) {
+		return ;
+	}
+	else {
+		while(currentPosition != NULL) {
+
+			if(!strncmp(currentPosition->destinationIPAddress,destinationIPAddress,INET_ADDRSTRLEN)) {
+				deleteRouteEntry(currentPosition,prevPosition);
+				return;
+			}
+			prevPosition = currentPosition;
+			currentPosition = currentPosition->next;
+		}
+	}
+
+}
+
+
 void deleteRouteEntry(routeEntry* currentPosition, routeEntry* prevPosition ) {
-	printf("Before deleting Route \n");
+	printf("ODRROUTINGTABLE.C : Before deleting Route \n");
 	printRoutingTable();
 	if(routeTableHead == NULL) {
 		return ;
@@ -90,7 +123,7 @@ void deleteRouteEntry(routeEntry* currentPosition, routeEntry* prevPosition ) {
 		prevPosition->next = currentPosition->next;
 		free(currentPosition);
 	}
-	printf("After deleting Route \n");
+	printf("ODRROUTINGTABLE.C :After deleting Route \n");
 	printRoutingTable();
 }
 
@@ -110,7 +143,7 @@ void deleteTimeoutEnries() {
 		if(isTimeExpired(currentPosition->timeCreated)) {
 			routeEntry* positionTODelete = currentPosition;
 			currentPosition = currentPosition->next;
-			deleteEntry(prevPosition,positionTODelete);
+			deleteRouteEntry(positionTODelete,prevPosition);
 		}
 		else {
 			prevPosition = currentPosition;
@@ -120,6 +153,7 @@ void deleteTimeoutEnries() {
 }
 
 int doesRouteExist(char destinationAddress[INET_ADDRSTRLEN]) {
+	deleteTimeoutEnries();
 	routeEntry* currentPosition = routeTableHead;
 	if(routeTableHead == NULL) {
 		return 0;
@@ -139,6 +173,7 @@ int doesRouteExist(char destinationAddress[INET_ADDRSTRLEN]) {
 }
 
 int getOutInfForDest(char destinationAddress[INET_ADDRSTRLEN]) {
+	deleteTimeoutEnries();
 	routeEntry* currentPosition = routeTableHead;
 	if(routeTableHead == NULL) {
 		return 0;
@@ -158,6 +193,7 @@ int getOutInfForDest(char destinationAddress[INET_ADDRSTRLEN]) {
 
 
 int getHopCountForROute(char destinationAddress[INET_ADDRSTRLEN]) {
+	deleteTimeoutEnries();
 	routeEntry* currentPosition = routeTableHead;
 	if(routeTableHead == NULL) {
 		return 0;
@@ -182,8 +218,8 @@ void populateDestMacAddressForRoute(char destinationAddress[INET_ADDRSTRLEN], ch
 	}
 	else  {
 		while(currentPosition != NULL) {
-			if(strncmp(currentPosition->destinationIPAddress,destinationAddress,6)) {
-				strncpy(destMacAddress,currentPosition->destinationMACAddress,6);
+			if(strncmp(currentPosition->destinationIPAddress,destinationAddress,HADDR_LEN)) {
+				memcpy(destMacAddress,currentPosition->destinationMACAddress,HADDR_LEN);
 
 			}
 			currentPosition = currentPosition->next;
@@ -193,14 +229,14 @@ void populateDestMacAddressForRoute(char destinationAddress[INET_ADDRSTRLEN], ch
 	return;
 }
 
-int getHopCountIfRouteExist(char destinationAddress[HADDR_LEN]) {
+int getHopCountIfRouteExist(char destinationIpAddress[INET_ADDRSTRLEN]) {
 	routeEntry* currentPosition = routeTableHead;
 	if(routeTableHead == NULL) {
 		return 0;
 	}
 	else  {
 		while(currentPosition != NULL) {
-			if(strncmp(currentPosition->destinationMACAddress,destinationAddress,6)) {
+			if(strncmp(currentPosition->destinationIPAddress,destinationIpAddress,INET_ADDRSTRLEN)) {
 				return currentPosition->hopcount;
 
 			}

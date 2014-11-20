@@ -48,8 +48,12 @@ int main(int argc,char *argv[]){
 			char *newFrame = allocate_strmem(FRAME_LENGTH);
 			recv_rawpacket(setSocket,newFrame);
 			ODRFrame currentFrame = breakFrame(newFrame);
+
 			//Adding Source Route To RoutingTable
 			addRoute(currentFrame.header.sourceAddress,currentFrame.data.source,setSocket,currentFrame.header.hopcount);
+			//Increasing HopCount
+			currentFrame.header.hopcount +=1;
+
 //			if(currentFrame.header.packetType == PACKET_RREQ) {
 //				handleRREQ(currentFrame);
 //			}
