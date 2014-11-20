@@ -8,6 +8,7 @@
 #include "ODRUtility.h"
 
 
+
 void getListeningSet(fd_set *readSet,int *maxfd, int* ifSockets, int count, int UDSsocket) {
 	(*maxfd) = 0;
 	FD_ZERO(readSet);
@@ -28,6 +29,7 @@ void sendRREQonOtherInterfaces(ODRFrame currentFrame, int listenedSocket,int *if
 	for (i=0; i <numOFInf; i++) {
 		if(ifSockets[i]!= listenedSocket) {
 			getSourceMacForInterface( ifSockets[i],  currentFrame.header.sourceAddress);
+			memcpy(currentFrame.header.destAddress,BRODCAST_MAC, HADDR_LEN);
 			printf("ODRDataPacketManager.c  : Source Mac Address is : ");
 			printMacAddress(currentFrame.header.sourceAddress);
 			printf("ODRDataPacketManager.c  : Destination Mac Address is :");
