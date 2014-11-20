@@ -5,8 +5,8 @@
  *      Author: harsha
  */
 
-#ifndef LIB_RREPMANAGER_H_
-#define LIB_RREPMANAGER_H_
+#ifndef LIB_ODRRREPMANAGER_H_
+#define LIB_ODRRREPMANAGER_H_
 #include "ODRRoutingTable.h"
 #include "AddressUtility.h"
 #include "unp.h"
@@ -15,4 +15,4 @@
 void handleRREP(ODRFrame currentFrame);
 
 
-#endif /* LIB_RREPMANAGER_H_ */
+#endif /* LIB_ODRRREPMANAGER_H_ */
