@@ -98,8 +98,8 @@ FrameBufferUtility.o: lib/FrameBufferUtility.c
 ODRRREQManager.o: lib/ODRRREQManager.c
 	${CC} ${CFLAGS} -c lib/ODRRREQManager.c
 
-ODRRREPManager.o: lib/ODRREPManager.c
-	${cc} ${CFLAGS} -c lib/ODRREPManager.c
+ODRRREPManager.o: lib/ODRRREPManager.c
+	${CC} ${CFLAGS} -c lib/ODRRREPManager.c
 
 
 

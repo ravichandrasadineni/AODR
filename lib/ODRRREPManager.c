@@ -27,7 +27,7 @@ int canForwardRREP(ODRFrame currentFrame){
 int isDestination(ODRFrame currentFrame){
 	char localAddress[INET_ADDRSTRLEN];
 	populateLocalAddress(localAddress);
-	if(!strncmp(currentFrame.data.destination,localAddress)){
+	if(!strncmp(currentFrame.data.destination,localAddress, INET_ADDRSTRLEN)){
 		return 1;
 	}
 	return 0;
@@ -40,8 +40,9 @@ void handleRREP(ODRFrame currentFrame){
 		sendPacketWaitingInBuffer();
 	}
 	else if(canForwardRREP(currentFrame)){
+		ODRFrame *frametoSend = &currentFrame;
 		int outSocket = getOutInfForDest(currentFrame.data.destination);
-		send_rawpacket(outSocket,currentFrame);
+		send_rawpacket(outSocket,(char *)frametoSend);
 
 	}
 	else if(shouldSendRREQ(currentFrame)){
