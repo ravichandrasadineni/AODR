@@ -108,7 +108,6 @@ void sendDataPacket(DataPacket packet,int udsSocket,int *ifSockets,int numOFInf)
 			currentFrame.header.RREPSent = 0;
 			int i;
 			sendRREQonAllInterfaces(currentFrame,ifSockets,numOFInf);
-			CURRENT_BRODCAST_ID++;
 		}
 	}
 }

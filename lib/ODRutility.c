@@ -26,13 +26,20 @@ void getListeningSet(fd_set *readSet,int *maxfd, int* ifSockets, int count, int 
 
 void sendRREQonOtherInterfaces(ODRFrame currentFrame, int listenedSocket,int *ifSockets,int numOFInf ) {
 	int i;
+	char localIpAddress[INET_ADDRSTRLEN];
+	populateLocalAddress(localIpAddress);
+	if (!strncmp(currentFrame.data.source,localIpAddress,INET_ADDRSTRLEN)) {
+		CURRENT_BRODCAST_ID +=1;
+		currentFrame.header.Broadcastid = CURRENT_BRODCAST_ID;
+	}
+	addToBroadCastList(currentFrame.data.source,currentFrame.header.Broadcastid);
 	for (i=0; i <numOFInf; i++) {
 		if(ifSockets[i]!= listenedSocket) {
 			getSourceMacForInterface( ifSockets[i],  currentFrame.header.sourceAddress);
 			memcpy(currentFrame.header.destAddress,BRODCAST_MAC, HADDR_LEN);
-			printf("ODRDataPacketManager.c  : Source Mac Address is : ");
+			printf("ODRUtility.c  : Source Mac Address is : ");
 			printMacAddress(currentFrame.header.sourceAddress);
-			printf("ODRDataPacketManager.c  : Destination Mac Address is :");
+			printf("ODRUtility.c  : Destination Mac Address is :");
 			printMacAddress(currentFrame.header.destAddress);
 			char* frame = buildRREQ(currentFrame);
 			send_rawpacket(ifSockets[i], frame);

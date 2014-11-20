@@ -10,15 +10,16 @@
 #include "unp.h"
 #include "ODRConstants.h"
 #include "MemoryAllocator.h"
+#include "AddressUtility.h"
 
 struct brocastList{
-	char brodcastAddr[HADDR_LEN];
+	char sourceAddr[INET_ADDRSTRLEN];
 	int  brodcastId;
 	struct brocastList* next;
 };
 typedef struct brocastList bList;
 
-int isObselete( char [HADDR_LEN],int brodcastId);
-int addToBroadCastList( char[HADDR_LEN],int brodcastId);
+int isObselete( char [INET_ADDRSTRLEN],int brodcastId);
+int addToBroadCastList( char[INET_ADDRSTRLEN],int brodcastId);
 
 #endif /* LIB_BROADCASTMAP_H_ */

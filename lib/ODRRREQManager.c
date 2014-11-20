@@ -96,13 +96,21 @@ void sendRREP(int listenedSocket, ODRFrame currentFrame) {
 	tempport = currentFrame.data.sourcePort;
 	currentFrame.data.sourcePort = currentFrame.data.destinationPort;
 	currentFrame.data.destinationPort = tempport;
+	// NEW RREP SETTING HOP COUNT TO 0
+	currentFrame.header.hopcount = 0;
 	printFrame(currentFrame);
 	char* rrepFrame = buildRREP(currentFrame);
 	send_rawpacket(listenedSocket,rrepFrame);
+	free(rrepFrame);
 }
 
 void handleRREQ(ODRFrame currentFrame, int listenedSocket, int *ifSockets,
 		int numOFInf) {
+	if(isObselete(currentFrame.data.source,currentFrame.header.Broadcastid)) {
+		printf("ODRRREQMANAGER.C : Obselete RREQ Packet,Ignoring\n");
+		return;
+	}
+	addToBroadCastList(currentFrame.data.source,currentFrame.header.Broadcastid);
 	printf("ODRRREQMANAGER.C : Recieved RREQ \n");
 	if (shouldSendRREP(currentFrame)) {
 		printf("ODRRREQMANAGER.C : sending RREP\n");

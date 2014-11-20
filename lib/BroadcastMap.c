@@ -9,12 +9,12 @@
 bList* bListHead = NULL;
 bList* bListTail = NULL;
 
-int isObselete( char hrdAddr[HADDR_LEN], int brodcastId) {
+int isObselete( char ipAddress[INET_ADDRSTRLEN], int brodcastId) {
 	if(bListHead  == NULL)
 		return 0;
 	bList* currentBrdElement = bListHead;
 	while(currentBrdElement !=NULL) {
-		if(!strncmp(currentBrdElement->brodcastAddr,hrdAddr,HADDR_LEN)) {
+		if(!strncmp(currentBrdElement->sourceAddr,ipAddress,INET_ADDRSTRLEN)) {
 			if(currentBrdElement->brodcastId >= brodcastId) {
 				return 1;
 			}
@@ -24,14 +24,16 @@ int isObselete( char hrdAddr[HADDR_LEN], int brodcastId) {
 	return 0;
 
 }
-void deleteExistingEntry(char hrdAddr[HADDR_LEN], int brodcastId) {
+void deleteExistingEntry(char ipaddress[INET_ADDRSTRLEN], int brodcastId) {
 	if(bListHead  == NULL)
 		return ;
 	bList* currentBrdElement = bListHead;
 	bList* prevBrdElement = NULL;
 	while(currentBrdElement !=NULL) {
-		if(!strncmp(currentBrdElement->brodcastAddr,hrdAddr,HADDR_LEN)) {
+		if(!strncmp(currentBrdElement->sourceAddr,ipaddress,INET_ADDRSTRLEN)) {
 			if(currentBrdElement->brodcastId > brodcastId) {
+				printf("BroadCastMap.c :current broadcast id is %d \n",currentBrdElement->brodcastId);
+				printf("BroadCastMap.c :broadcast id in the received packet is  %d \n",brodcastId);
 				printf("BrodCastMap.c : DELETE CALLED TO DELETE ADVANCED BRODCAST PACKET INFO\n");
 				exit(1);
 			}
@@ -58,8 +60,8 @@ void deleteExistingEntry(char hrdAddr[HADDR_LEN], int brodcastId) {
 	return ;
 
 }
-int addToBroadCastList( char hrdAddr[HADDR_LEN], int brodcastId) {
-	deleteExistingEntry( hrdAddr,  brodcastId);
+int addToBroadCastList( char souceAddr[INET_ADDRSTRLEN], int brodcastId) {
+	deleteExistingEntry( souceAddr,  brodcastId);
 
 	if(bListHead  == NULL) {
 		bListHead = (bList *)allocate_void(sizeof(bList));
@@ -69,7 +71,7 @@ int addToBroadCastList( char hrdAddr[HADDR_LEN], int brodcastId) {
 		bListTail->next = (bList *)allocate_void(sizeof(bList));
 		bListTail = bListTail->next;
 	}
-	strncpy(bListTail->brodcastAddr,hrdAddr,HADDR_LEN);
+	strncpy(bListTail->sourceAddr,souceAddr,INET_ADDRSTRLEN);
 	bListTail->brodcastId = brodcastId;
 	bListTail->next =NULL;
 }
