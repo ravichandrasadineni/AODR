@@ -12,7 +12,7 @@
 
 
 char* marshallMessage(DataPacket packet) {
-	char destPortStr[6], forceRouteStr[6], sourcePortStr[6];
+	char destPortStr[6], forceRouteStr[6], sourcePortStr[6], RREPSent;
 	char *temp = NULL;
 	intTochar(packet.destinationPort,destPortStr);
 	intTochar(packet.forceRoute,forceRouteStr);
@@ -27,9 +27,9 @@ char* marshallMessage(DataPacket packet) {
 	strncat(marshelledMessage,packet.destination,INET_ADDRSTRLEN);
 	strncat(marshelledMessage,DELIMETER, strlen(DELIMETER));
 	strncat(marshelledMessage,destPortStr,6);
-	strncat( marshelledMessage,DELIMETER, strlen(DELIMETER));
+	strncat(marshelledMessage,DELIMETER, strlen(DELIMETER));
 	strncat(marshelledMessage,forceRouteStr,strlen(forceRouteStr));
-	strncat( marshelledMessage, DELIMETER,strlen(DELIMETER));
+	strncat(marshelledMessage, DELIMETER,strlen(DELIMETER));
 	strncat(marshelledMessage,packet.message,strlen(packet.message));
 	printf("Marshelled message in marshalling is %s \n",marshelledMessage );
 	return marshelledMessage;

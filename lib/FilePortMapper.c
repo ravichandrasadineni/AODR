@@ -16,6 +16,21 @@ void initializeportMap(int timeOut) {
 	addEntry(TIME_SERVER_PORT, TIME_SERVER);
 }
 
+void printPortMapper(){
+	filePortMap* startPosition;
+	startPosition = filePortMapHead;
+	if(startPosition == NULL){
+		printf("FilePortMapper is empty \n");
+	}
+	else
+	{
+		printf("The contents of FilePortMapper is :\nPort\tFileName\t\tSavedTime\n");
+		while(startPosition!=NULL){
+			printf("%d %s\t%.24s\r\n",startPosition->port,startPosition->fileName,ctime(&(startPosition->entryTime)));
+			startPosition = startPosition->next;
+		}
+	}
+}
 
 int generatePortNumber(char *fileName) {
 	//removeTimeOutEntries();
@@ -41,7 +56,7 @@ int generatePortNumber(char *fileName) {
 		}
 		if(currentPosition==NULL)
 			addEntry(random,fileName);
-			return random;
+		return random;
 	}
 }
 
@@ -70,6 +85,7 @@ void addEntry(int port, char *fileName) {
 		strncpy(filePortMapTail->fileName,fileName,FILE_NAME_LENGTH);
 		filePortMapTail->port= port;
 		filePortMapTail->next = NULL;
+		printPortMapper();
 		return;
 	}
 
@@ -78,6 +94,7 @@ void addEntry(int port, char *fileName) {
 	printf("FilePortMapper.c : File Path after adding entry is %s \n",filePortMapTail->fileName);
 	filePortMapTail->port= port;
 	filePortMapTail->next = NULL;
+	printPortMapper();
 	return ;
 }
 
@@ -135,7 +152,7 @@ void removeTimeOutEntries() {
 			deleteEntry(portToDelete);
 		}
 		else {
-		currentPosition = currentPosition->next;
+			currentPosition = currentPosition->next;
 		}
 	}
 }

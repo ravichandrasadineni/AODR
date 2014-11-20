@@ -55,6 +55,7 @@ void sendDataPacket(DataPacket packet,int udsSocket,int *ifSockets,int numOFInf)
 			memcpy(currentFrame.header.destAddress,BRODCAST_MAC, HADDR_LEN);
 			currentFrame.header.hopcount=0;
 			currentFrame.header.Broadcastid = CURRENT_BRODCAST_ID;
+			currentFrame.header.RREPSent = 0;
 			int i;
 			for(i=0;i<numOFInf;i++) {
 				getSourceMacForInterface( ifSockets[i],  currentFrame.header.sourceAddress);

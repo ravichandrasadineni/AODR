@@ -26,6 +26,7 @@ void deleteEntry(int port);
 void removeTimeOutEntries();
 void getFileName(int port, char* fileName);
 int isEntryExistForPort(int port);
+void printPortMapper();
 
 
 

@@ -28,12 +28,13 @@ typedef struct {
 	char sourceAddress[HADDR_LEN];
 	char destAddress[HADDR_LEN];
 	int hopcount;
+	int RREPSent;
 }ODRHeader;
 
 typedef struct{
 	ODRHeader header;
 	DataPacket data;
-}ODRFrame;
+} ODRFrame;
 
 
 

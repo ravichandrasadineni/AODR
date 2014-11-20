@@ -28,19 +28,22 @@ void buildFrame(char* sourceMac, char* destinationMac, char *data, char* frame) 
 }
 
 char * MarshalledFramePayload(ODRFrame currentFrame) {
-	char hopcount[HOPCOUNT_LENGTH +1], brodcastId[BRODCAST_ID_LENGTH+1];
+	char hopcount[HOPCOUNT_LENGTH +1], brodcastId[BRODCAST_ID_LENGTH+1],rrepsent[RREPSENT_LENGTH+1];
 	memset(hopcount,'\0',HOPCOUNT_LENGTH);
 	memset(brodcastId,'\0',BRODCAST_ID_LENGTH);
 	char * data = marshallMessage(currentFrame.data);
 	char* frame = allocate_strmem(FRAME_BUFFER_LENGTH);
 	sprintf(hopcount,"%d",currentFrame.header.hopcount);
 	sprintf(brodcastId,"%d",currentFrame.header.Broadcastid);
+	sprintf(rrepsent,"%d", currentFrame.header.RREPSent);
 	printf("FrameBufferUtility.c : packettype value is %d\n",currentFrame.header.packetType);
 	sprintf(frame,"%d",currentFrame.header.packetType);
 	strncat(frame,DELIMETER, strlen(DELIMETER));
 	strncat(frame,hopcount,HOPCOUNT_LENGTH);
 	strncat(frame,DELIMETER, strlen(DELIMETER));
 	strncat(frame,brodcastId,BRODCAST_ID_LENGTH);
+	strncat(frame,DELIMETER, strlen(DELIMETER));
+	srtncat(frame,rrepsent, strlen(rrepsent));
 	strncat(frame,DELIMETER, strlen(DELIMETER));
 	strncat(frame,data,strlen(data));
 	printf("FrameBufferUtility.c : Frame is %s \n", frame);
