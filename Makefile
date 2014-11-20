@@ -31,7 +31,7 @@ FLAGS = -O0 -ggdb
 CFLAGS = ${FLAGS} -I unpv13e/lib
 all: client  server ODR
 
-OBJECTS=AddressUtility.o GenericUtility.o ODRAPI.o UDSUtility.o MemoryAllocator.o ODRsocketUtility.o FilePortMapper.o get_hw_addrs.o BroadcastMap.o ODRutility.o ODRRoutingTable.o ODRDataPacketManager.o FrameSendRecvUtility.o FrameBufferUtility.o
+OBJECTS=AddressUtility.o GenericUtility.o ODRAPI.o UDSUtility.o MemoryAllocator.o ODRsocketUtility.o FilePortMapper.o get_hw_addrs.o BroadcastMap.o ODRutility.o ODRRoutingTable.o ODRDataPacketManager.o FrameSendRecvUtility.o FrameBufferUtility.o ODRRREQManager.o
 
 
 client: client.o $(OBJECTS)
@@ -94,6 +94,9 @@ FrameSendRecvUtility.o: lib/FrameSendRecvUtility.c
 
 FrameBufferUtility.o: lib/FrameBufferUtility.c
 	${CC} ${CFLAGS} -c lib/FrameBufferUtility.c
+
+ODRRREQManager.o: lib/ODRRREQManager.c
+	${CC} ${CFLAGS} -c lib/ODRRREQManager.c
 
 
 
