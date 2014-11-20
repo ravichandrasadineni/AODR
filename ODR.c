@@ -59,7 +59,7 @@ int main(int argc,char *argv[]){
 				handleRREQ(currentFrame);
 			}
 			else if (currentFrame.header.packetType ==  PACKET_RREP) {
-				handleRREP(currentFrame);
+				handleRREP(currentFrame,setSocket,ifSockets,numOFInf);
 			}
 
 //			else if (currentFrame.header.packetType ==  PACKET_RREP)  {

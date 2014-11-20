@@ -33,20 +33,28 @@ int isDestination(ODRFrame currentFrame){
 	return 0;
 }
 
-
-void handleRREP(ODRFrame currentFrame){
+//handleRREP(currentFrame,setSocket,*ifSockets,numOFInf);
+void handleRREP(ODRFrame currentFrame, int setSocket, int *ifSockets, int numofInter){
 	if(isDestination(currentFrame)){
 		printf("Sending packet in Parked Buffer :");
 		sendPacketWaitingInBuffer();
 	}
 	else if(canForwardRREP(currentFrame)){
-		int outSocket = getOutInfForDest(currentFrame.data.destination);
-		send_rawpacket(outSocket,(char *)&currentFrame);
-
+		char destMacAddr[HADDR_LEN], sourceMacAddr[HADDR_LEN];
+		populateDestMacAddressForRoute(currentFrame.data.destination,destMacAddr);
+		memcpy(currentFrame.header.destAddress,  destMacAddr, HADDR_LEN);
+		getSourceMacForInterface(setSocket,sourceMacAddr);
+		memcpy(currentFrame.header.sourceAddress, sourceMacAddr, HADDR_LEN);
+		send_rawpacket(setSocket,(char *)&currentFrame);
 	}
 	else if(shouldSendRREQ(currentFrame)){
+		char sourceMacAddr[HADDR_LEN];
 		//Parking data into buffer
 		parkIntoBuffer(currentFrame.data);
+		getSourceMacForInterface(setSocket,sourceMacAddr);
+		memcpy(currentFrame.header.sourceAddress, sourceMacAddr, HADDR_LEN);
+		memcpy(c)
+		sendRREQonOtherInterfaces(currentFrame, setSocket, ifSockets, numofInter);
 
 	}
 }

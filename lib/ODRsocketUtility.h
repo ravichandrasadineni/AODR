@@ -31,8 +31,8 @@ typedef struct  {
 typedef struct interfacefInfo  ifInfo;
 
 void createAndBindSocketsTOInterfaces(int** sockets, int* number);
-void  getSourceMacForInterface(int sockFd, char sourceMac[HADDR_LEN] );
 int createAndBindUDS();
+void  getSourceMacForInterface(int sockFd, char sourceMac[HADDR_LEN] );
 void getListOfInterfaces(ifInfo** ifList, int* size );
 struct sockaddr_ll getODRBindedSocket(int sockfd);
 int createNewSocket();

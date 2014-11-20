@@ -12,7 +12,9 @@
 #include "unp.h"
 #include "ODRDataPacketManager.h"
 #include "FrameSendRecvUtility.h"
-void handleRREP(ODRFrame currentFrame);
+#include "ODRsocketUtility.h"
+#include "ODRRoutingTable.h"
+void handleRREP(ODRFrame currentFrame,int setSocket,int *ifSockets,int numOFInf);
 
 
 #endif /* LIB_ODRRREPMANAGER_H_ */
