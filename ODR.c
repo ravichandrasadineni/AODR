@@ -62,13 +62,13 @@ int main(int argc,char *argv[]){
 				handleRREQ(currentFrame,setSocket,ifSockets,numOFInf);
 
 			}
-			//			else if (currentFrame.header.packetType ==  PACKET_RREP) {
-			//				handleRREP(currentFrame);
-			//			}
+			else if (currentFrame.header.packetType ==  PACKET_RREP) {
+				handleRREP(currentFrame,setSocket,ifSockets,numOFInf);
+			}
 
-			//			else if (currentFrame.header.packetType ==  PACKET_RREP)  {
-			//				handleDataPacket(currentFrame);
-			//			}
+			else if (currentFrame.header.packetType ==  PACKET_RREP)  {
+				handleDataPacket(currentFrame, setSocket,ifSockets,numOFInf);
+			}
 			//Adding Source Route To RoutingTable
 			printf("ODR.C: Set socket is %d \n",setSocket);
 			addRoute(currentFrame.header.sourceAddress,currentFrame.data.source,setSocket,currentFrame.header.hopcount,currentFrame.data.forceRoute);

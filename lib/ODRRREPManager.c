@@ -24,6 +24,8 @@ int canForwardRREP(ODRFrame currentFrame){
 	}
 	return 0;
 }
+
+
 int isDestination(ODRFrame currentFrame){
 	char localAddress[INET_ADDRSTRLEN];
 	populateLocalAddress(localAddress);
@@ -34,7 +36,7 @@ int isDestination(ODRFrame currentFrame){
 }
 
 //handleRREP(currentFrame,setSocket,*ifSockets,numOFInf);
-void handleRREP(ODRFrame currentFrame, int setSocket, int *ifSockets, int numofInter){
+void handleRREP(ODRFrame currentFrame, int listenedSocket, int *ifSockets, int numofInter){
 	if(isDestination(currentFrame)){
 		printf("Sending packet in Parked Buffer :");
 		sendPacketWaitingInBuffer();
@@ -43,19 +45,27 @@ void handleRREP(ODRFrame currentFrame, int setSocket, int *ifSockets, int numofI
 		char destMacAddr[HADDR_LEN], sourceMacAddr[HADDR_LEN];
 		populateDestMacAddressForRoute(currentFrame.data.destination,destMacAddr);
 		memcpy(currentFrame.header.destAddress,  destMacAddr, HADDR_LEN);
-		getSourceMacForInterface(setSocket,sourceMacAddr);
+		getSourceMacForInterface(listenedSocket,sourceMacAddr);
 		memcpy(currentFrame.header.sourceAddress, sourceMacAddr, HADDR_LEN);
-		send_rawpacket(setSocket,(char *)&currentFrame);
+		char* MarshalledFrame = buildRREP(currentFrame);
+		send_rawpacket(listenedSocket,MarshalledFrame);
+		free(MarshalledFrame);
 	}
 	else if(shouldSendRREQ(currentFrame)){
-		char sourceMacAddr[HADDR_LEN];
+		char sourceMacAddr[HADDR_LEN], sourceIPAddr[INET_ADDRSTRLEN];
 		//Parking data into buffer
 		parkIntoBuffer(currentFrame.data);
-		getSourceMacForInterface(setSocket,sourceMacAddr);
+		//Rebuilding RREQ from the currentFrame
+		getSourceMacForInterface(listenedSocket,sourceMacAddr);
 		memcpy(currentFrame.header.sourceAddress, sourceMacAddr, HADDR_LEN);
-		memcpy(c)
-		sendRREQonOtherInterfaces(currentFrame, setSocket, ifSockets, numofInter);
-
+		memcpy(currentFrame.header.destAddress, BRODCAST_MAC, HADDR_LEN);
+		currentFrame.header.RREPSent = 0;
+		currentFrame.header.hopcount = 0;
+		currentFrame.header.packetType = ETH_TYPE;
+		currentFrame.header.Broadcastid = 0;
+		populateLocalAddress(sourceIPAddr);
+		memcpy(currentFrame.data.source, sourceIPAddr, INET_ADDRSTRLEN);
+		sendRREQonOtherInterfaces(currentFrame, listenedSocket, ifSockets, numofInter);
 	}
 }
 

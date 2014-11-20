@@ -49,7 +49,7 @@ char * MarshalledFramePayload(ODRFrame currentFrame) {
 
 ODRFrame breakFrame(char* currentFrame) {
 	/*The packet received will have the structure DestinationMacSourceMacPackettypePakcetLength(header)
-	 * PakcetType:::Hopcount:::BroadcastID:::souceIPaddr:::sourcePort:::DestIPAddr:::DestPort:::forceroute:::Message*/
+	 * PakcetType:::Hopcount:::BroadcastID:::RREPSent:::souceIPaddr:::sourcePort:::DestIPAddr:::DestPort:::forceroute:::Message*/
 	ODRFrame receivedFrame;
 	char frameToken[FRAME_LENGTH];
 	memset(frameToken,'\0',FRAME_LENGTH);
@@ -92,7 +92,8 @@ char* buildRREQ(ODRFrame currentFrame){
 
 char* buildRREP(ODRFrame currentFrame){
 	currentFrame.header.packetType =  PACKET_RREP;
-	currentFrame.header.Broadcastid =0;
+	if(currentFrame.header.Broadcastid <= 0)
+		currentFrame.header.Broadcastid =0;
 	char* frame = allocate_strmem(FRAME_LENGTH);
 	char* dataPayLoad = MarshalledFramePayload(currentFrame);
 	buildFrame(currentFrame.header.sourceAddress, currentFrame.header.destAddress, dataPayLoad,frame);
@@ -102,7 +103,8 @@ char* buildRREP(ODRFrame currentFrame){
 
 char* buildMessageFrame(ODRFrame currentFrame){
 	currentFrame.header.packetType = PACKET_MSG;
-	currentFrame.header.Broadcastid =0;
+	if(currentFrame.header.Broadcastid <= 0)
+		currentFrame.header.Broadcastid = 0;
 	char* frame = allocate_strmem(FRAME_LENGTH);
 	memset(frame,'\0',FRAME_LENGTH);
 	char* dataPayLoad = MarshalledFramePayload(currentFrame);
