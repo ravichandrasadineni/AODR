@@ -16,7 +16,6 @@ int getSetSocket(int *ifSockets, int numOfInf, fd_set *readSet) {
 }
 
 int shoudAddRoute(ODRFrame currentFrame) {
-	printf("Message type of current route is %d \n",currentFrame.header.packetType);
 	if(currentFrame.header.packetType == PACKET_MSG) {
 		return 1;
 	}

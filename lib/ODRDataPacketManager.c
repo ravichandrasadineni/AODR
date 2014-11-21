@@ -103,10 +103,13 @@ void sendDataPacket(DataPacket packet,int udsSocket,int *ifSockets,int numOFInf)
 		}
 		else {
 			printf("ODRDataPacketManager.c : Route does not exist \n");
+			//Switching off force route in the packet before storing into Parked Buffer
 			packet.forceRoute = OFF;
 			parkIntoBuffer(packet);
 			ODRFrame currentFrame;
 			currentFrame.data= packet;
+			//Switching on force route in the RREQ
+			currentFrame.data.forceRoute =1;
 			memcpy(currentFrame.header.destAddress,BRODCAST_MAC, HADDR_LEN);
 			currentFrame.header.hopcount=0;
 			currentFrame.header.Broadcastid = CURRENT_BRODCAST_ID;
