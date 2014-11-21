@@ -87,9 +87,9 @@ int main(int argc,char *argv[]){
 				handleRREP(currentFrame,setSocket,ifSockets,numOFInf);
 			}
 
-			//			else if (currentFrame.header.packetType ==  PACKET_MSG)  {
-			//				handleDataPacket(currentFrame, setSocket,ifSockets,numOFInf);
-			//			}
+			else if (currentFrame.header.packetType ==  PACKET_MSG)  {
+				handleDataPacket(currentFrame, setSocket,ifSockets,numOFInf,udsSocket);
+			}
 			if(shoudAddRoute(currentFrame)) {
 
 				addRoute(currentFrame.header.sourceAddress,currentFrame.data.source,setSocket,currentFrame.header.hopcount-1,currentFrame.data.forceRoute);

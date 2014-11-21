@@ -51,7 +51,7 @@ void addRoute(char destinationMACAddress[HADDR_LEN],char destinationIPAddress[IN
 		}
 		else{
 			int currentHopCount = getHopCountIfRouteExist(destinationIPAddress);
-			if((currentHopCount >= 0)&&(currentHopCount <hopcount)) {
+			if((currentHopCount > 0)&&(currentHopCount <hopcount)) {
 				return;
 			}
 			deleteRoute(destinationIPAddress);
@@ -185,9 +185,10 @@ int getOutInfForDest(char destinationAddress[INET_ADDRSTRLEN]) {
 	}
 	else  {
 		while(currentPosition != NULL) {
-			if(!strncmp(currentPosition->destinationIPAddress,destinationAddress,6)) {
+			if(!strncmp(currentPosition->destinationIPAddress,destinationAddress,INET_ADDRSTRLEN)) {
+				printf("Destination Ip Address is %s \n",currentPosition->destinationIPAddress);
+				printf("Destination socket Id is %d \n",currentPosition->socketId);
 				return currentPosition->socketId;
-
 			}
 			currentPosition = currentPosition->next;
 		}

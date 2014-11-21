@@ -23,7 +23,8 @@ void parkIntoBuffer(DataPacket packet);
 void sendDataPacket(DataPacket packet,int udsSocket,int *ifSockets,int numOFInf);
 int isPacketWaitingForDestination(char destiNationAddress[INET_ADDRSTRLEN]);
 void RetrievePacketsForDestination(char destiNationAddress[INET_ADDRSTRLEN], DataPacket *destinationPackets);
+void handleDataPacket(ODRFrame currentFrame, int listenedSocket, int *ifSockets, int numOFInf, int udsSocket);
 void sendPacketWaitingInBuffer();
-void handleDataPacket(ODRFrame currentFrame, int listenedSocket, int *ifSockets, int numOFInf);
+
 
 #endif /* LIB_ODRDATAPACKETMANAGER_H_ */

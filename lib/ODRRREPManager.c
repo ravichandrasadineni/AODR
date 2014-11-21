@@ -46,10 +46,10 @@ void handleRREP(ODRFrame currentFrame, int listenedSocket, int *ifSockets, int n
 		char destMacAddr[HADDR_LEN], sourceMacAddr[HADDR_LEN];
 		populateDestMacAddressForRoute(currentFrame.data.destination,destMacAddr);
 		memcpy(currentFrame.header.destAddress,  destMacAddr, HADDR_LEN);
-		getSourceMacForInterface(listenedSocket,sourceMacAddr);
+		int Socket = getOutInfForDest(currentFrame.data.destination);
+		getSourceMacForInterface(Socket,sourceMacAddr);
 		memcpy(currentFrame.header.sourceAddress, sourceMacAddr, HADDR_LEN);
 		char* MarshalledFrame = buildRREP(currentFrame);
-		int Socket = getOutInfForDest(currentFrame.data.destination);
 		send_rawpacket(Socket,MarshalledFrame);
 		free(MarshalledFrame);
 	}

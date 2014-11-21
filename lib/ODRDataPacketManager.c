@@ -31,22 +31,26 @@ int canForwardMessage(char destIPAddr[INET_ADDRSTRLEN]){
 	return 0;
 }
 
-void handleDataPacket(ODRFrame currentFrame, int listenedSocket, int *ifSockets, int numOFInf){
+void handleDataPacket(ODRFrame currentFrame, int listenedSocket, int *ifSockets, int numOFInf, int udsSocket){
+	printf("ODRDataPacketManager.c : Received Data Packet \n");
 	if(isintendedDestination(currentFrame.data.destination)){
-		char *fileName;
+		char fileName[FILE_NAME_LENGTH];
 		//gets filename from portMapper
-		getFileName(listenedSocket, fileName);
-		msg_sendTo(listenedSocket, currentFrame.data, fileName);
+		getFileName(currentFrame.data.destinationPort, fileName);
+		printf("ODRDataPacketManager.c : file name is %s \n ", fileName);
+		msg_sendTo(udsSocket, currentFrame.data, fileName);
 	}
 	else if(canForwardMessage(currentFrame.data.destination)){
 		char sourceMacAddr[HADDR_LEN], destMacAddr[HADDR_LEN];
-		getSourceMacForInterface(listenedSocket, sourceMacAddr);
+		int Socket = getOutInfForDest(currentFrame.data.destination);
+		printf("ODRDataPacketManger.c : Outgoing interface is %d \n", Socket);
+		printf("ODRDataPacketManger.c : Destination ip is %s \n", currentFrame.data.destination);
+		getSourceMacForInterface(Socket, sourceMacAddr);
 		memcpy(currentFrame.header.sourceAddress, sourceMacAddr, HADDR_LEN);
 		populateDestMacAddressForRoute(currentFrame.data.destination,destMacAddr);
 		memcpy(currentFrame.header.destAddress, destMacAddr, HADDR_LEN);
-		//have to decide on how to handle hopcount etc
 		char *currentPayload = buildMessageFrame(currentFrame);
-		send_rawpacket(listenedSocket, currentPayload);
+		send_rawpacket(Socket, currentPayload);
 	}
 	else {
 		//Parking data..send RREQ
