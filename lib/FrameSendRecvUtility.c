@@ -9,6 +9,7 @@
 void send_rawpacket (int raswSock, unsigned char * frame) {
 	int sent= 0;
 	int pack_len = FRAME_LENGTH;
+
 	if((sent=write(raswSock, frame, pack_len)) != pack_len)
 	{
 		if(sent < 0) {
@@ -17,7 +18,7 @@ void send_rawpacket (int raswSock, unsigned char * frame) {
 		printf("Could only send %d bytes of packet of length  %d\n", sent, pack_len);
 
 	}
-
+	printf("PACKET SENT \n");
 }
 
 int recv_rawpacket(int rawsock, unsigned char *pkt) {

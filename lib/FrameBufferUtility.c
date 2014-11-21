@@ -75,6 +75,7 @@ ODRFrame breakFrame(char* currentFrame) {
 	receivedFrame.data.destinationPort = atoi(strtok(NULL, DELIMETER));
 	receivedFrame.data.forceRoute = atoi(strtok(NULL, DELIMETER));
 	strncpy(receivedFrame.data.message,strtok(NULL, DELIMETER),FRAME_BUFFER_LENGTH);
+	printf("RECEIVED PACKET : \n");
 	printFrame(receivedFrame);
 	return receivedFrame;
 }

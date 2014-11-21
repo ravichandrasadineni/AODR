@@ -20,11 +20,12 @@ int shoudForwardRREQ(ODRFrame currentFrame, int numOFInf) {
 
 	// If the hopCount for the source  is less. forward
 	int hopCount = getHopCountForROute(currentFrame.data.source);
-	if (hopCount > (currentFrame.header.hopcount - 1)) {
-		printf("ODRRREQMANAGER.C : Old route Better than current Route\n");
-		return 1;
+	if (hopCount >= (currentFrame.header.hopcount - 1)) {
+		printf("ODRRREQMANAGER.C : Old route has same or less hop count than current Route\n");
 	} else {
 		printf("ODRRREQMANAGER.C : Heard a better route to source\n");
+		return 1;
+
 	}
 
 	// If I am the destination router.  don't forward
