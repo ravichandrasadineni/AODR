@@ -85,7 +85,6 @@ void addEntry(int port, char *fileName) {
 		strncpy(filePortMapTail->fileName,fileName,FILE_NAME_LENGTH);
 		filePortMapTail->port= port;
 		filePortMapTail->next = NULL;
-		printPortMapper();
 		return;
 	}
 
@@ -94,7 +93,6 @@ void addEntry(int port, char *fileName) {
 	printf("FilePortMapper.c : File Path after adding entry is %s \n",filePortMapTail->fileName);
 	filePortMapTail->port= port;
 	filePortMapTail->next = NULL;
-	printPortMapper();
 	return ;
 }
 
@@ -159,7 +157,6 @@ void removeTimeOutEntries() {
 
 void getFileName(int port, char* fileName) {
 	//removeTimeOutEntries();
-	printPortMapper();
 	if(filePortMapHead == NULL)
 		return;
 	filePortMap* currentPosition = filePortMapHead;
