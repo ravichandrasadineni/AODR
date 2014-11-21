@@ -31,8 +31,8 @@ void sendRREQonOtherInterfaces(ODRFrame currentFrame, int listenedSocket,int *if
 	if (!strncmp(currentFrame.data.source,localIpAddress,INET_ADDRSTRLEN)) {
 		CURRENT_BRODCAST_ID +=1;
 		currentFrame.header.Broadcastid = CURRENT_BRODCAST_ID;
+		addToBroadCastList(currentFrame.data.source,currentFrame.header.Broadcastid);
 	}
-	addToBroadCastList(currentFrame.data.source,currentFrame.header.Broadcastid);
 	for (i=0; i <numOFInf; i++) {
 		if(ifSockets[i]!= listenedSocket) {
 			getSourceMacForInterface( ifSockets[i],  currentFrame.header.sourceAddress);

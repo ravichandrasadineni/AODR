@@ -16,7 +16,7 @@ int getSetSocket(int *ifSockets, int numOfInf, fd_set *readSet) {
 }
 
 int shoudAddRoute(ODRFrame currentFrame) {
-
+	printf("Message type of current route is %d \n",currentFrame.header.packetType);
 	if(currentFrame.header.packetType == PACKET_MSG) {
 		return 1;
 	}
@@ -29,8 +29,8 @@ int shoudAddRoute(ODRFrame currentFrame) {
 			return 0;
 		}
 		return 1;
-
 	}
+	printf("ODR.C :Before checking RREQ condition \n");
 	// ONLY RREQ LEFT
 	if(!isObselete(currentFrame.data.source,currentFrame.header.Broadcastid)) {
 		printf("ODR.C : RREQ  adding route \n");
@@ -42,7 +42,7 @@ int shoudAddRoute(ODRFrame currentFrame) {
 			return 1;
 		}
 	}
-
+	printf("ODR.C :RREQ is obselete \n");
 	return 0;
 
 }
@@ -90,11 +90,11 @@ int main(int argc,char *argv[]){
 			//			else if (currentFrame.header.packetType ==  PACKET_MSG)  {
 			//				handleDataPacket(currentFrame, setSocket,ifSockets,numOFInf);
 			//			}
-			//if(shoudAddRoute(currentFrame)) {
+			if(shoudAddRoute(currentFrame)) {
 
 				addRoute(currentFrame.header.sourceAddress,currentFrame.data.source,setSocket,currentFrame.header.hopcount-1,currentFrame.data.forceRoute);
-			//}
-			if (!isObselete(currentFrame.header.sourceAddress,currentFrame.header.Broadcastid)) {
+			}
+			if (!isObselete(currentFrame.data.source,currentFrame.header.Broadcastid)) {
 				addToBroadCastList(currentFrame.data.source,currentFrame.header.Broadcastid);
 			}
 
