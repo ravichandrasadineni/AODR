@@ -159,11 +159,11 @@ void removeTimeOutEntries() {
 
 void getFileName(int port, char* fileName) {
 	//removeTimeOutEntries();
+	printPortMapper();
 	if(filePortMapHead == NULL)
 		return;
 	filePortMap* currentPosition = filePortMapHead;
 	while(currentPosition !=NULL) {
-		printf("FilePortMapper.c: file path is %s\n",currentPosition->fileName);
 		if(currentPosition->port == port) {
 			strncpy(fileName,currentPosition->fileName,FILE_NAME_LENGTH);
 			return;
