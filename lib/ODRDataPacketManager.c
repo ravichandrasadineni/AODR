@@ -49,6 +49,7 @@ void handleDataPacket(ODRFrame currentFrame, int listenedSocket, int *ifSockets,
 		memcpy(currentFrame.header.sourceAddress, sourceMacAddr, HADDR_LEN);
 		populateDestMacAddressForRoute(currentFrame.data.destination,destMacAddr);
 		memcpy(currentFrame.header.destAddress, destMacAddr, HADDR_LEN);
+		printf("ODRDataPacketManger.c : Destination MAc Address is %s \n", currentFrame.header.destAddress);
 		char *currentPayload = buildMessageFrame(currentFrame);
 		send_rawpacket(Socket, currentPayload);
 	}
