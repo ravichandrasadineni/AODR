@@ -66,7 +66,7 @@ int main(int argc, char*argv[]) {
 			}
 			else {
 				if(isRetransmitted) {
-					sendingPacket.forceRoute = 0;
+					sendingPacket.forceRoute = 1;
 				}
 				else {
 					isRetransmitted = 1;

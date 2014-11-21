@@ -95,7 +95,9 @@ int main(int argc,char *argv[]){
 				addRoute(currentFrame.header.sourceAddress,currentFrame.data.source,setSocket,currentFrame.header.hopcount-1,currentFrame.data.forceRoute);
 			}
 			if (!isObselete(currentFrame.data.source,currentFrame.header.Broadcastid)) {
-				addToBroadCastList(currentFrame.data.source,currentFrame.header.Broadcastid);
+				if(currentFrame.header.packetType == PACKET_RREQ) {
+					addToBroadCastList(currentFrame.data.source,currentFrame.header.Broadcastid);
+				}
 			}
 
 		}
