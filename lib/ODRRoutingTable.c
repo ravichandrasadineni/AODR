@@ -111,11 +111,15 @@ void deleteRouteEntry(routeEntry* currentPosition, routeEntry* prevPosition ) {
 			free(routeTableHead);
 			routeTableHead = NULL;
 			routeTableTail = NULL;
+			printf("ODRROUTINGTABLE.C :After deleting Route \n");
+			printRoutingTable();
 			return;
 		}
 		else {
 			routeTableHead = routeTableHead->next;
 			free(currentPosition);
+			printf("ODRROUTINGTABLE.C :After deleting Route \n");
+			printRoutingTable();
 			return;
 		}
 	}
@@ -178,7 +182,6 @@ int doesRouteExist(char destinationAddress[INET_ADDRSTRLEN]) {
 }
 
 int getOutInfForDest(char destinationAddress[INET_ADDRSTRLEN]) {
-	deleteTimeoutEnries();
 	routeEntry* currentPosition = routeTableHead;
 	if(routeTableHead == NULL) {
 		return 0;
@@ -199,7 +202,6 @@ int getOutInfForDest(char destinationAddress[INET_ADDRSTRLEN]) {
 
 
 int getHopCountForROute(char destinationAddress[INET_ADDRSTRLEN]) {
-	deleteTimeoutEnries();
 	routeEntry* currentPosition = routeTableHead;
 	if(routeTableHead == NULL) {
 		return 0;
