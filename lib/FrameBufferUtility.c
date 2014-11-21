@@ -106,6 +106,7 @@ char* buildRREP(ODRFrame currentFrame){
 
 char* buildMessageFrame(ODRFrame currentFrame){
 	currentFrame.header.packetType = PACKET_MSG;
+	currentFrame.data.forceRoute = OFF;
 	if(currentFrame.header.Broadcastid <= 0)
 		currentFrame.header.Broadcastid = 0;
 	char* frame = allocate_strmem(FRAME_LENGTH);

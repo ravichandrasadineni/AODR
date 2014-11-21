@@ -29,6 +29,8 @@
 #define HOPCOUNT_LENGTH 2
 #define PACKETTYPE_LENGTH 1
 #define RREPSENT_LENGTH 1
+#define OFF 0
+#define ON 0
 static const char BRODCAST_MAC[HADDR_LEN] = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
 extern int CURRENT_BRODCAST_ID;
 #endif /* ODRCONSTANTS_H_ */
