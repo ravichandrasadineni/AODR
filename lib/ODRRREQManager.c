@@ -45,6 +45,10 @@ int shoudForwardRREQ(ODRFrame currentFrame, int numOFInf) {
 		//otherwise don't forward
 		return 0;
 	}
+	// If the route does not exist for the destination router.
+	else if (!doesRouteExist(currentFrame.data.destination)) {
+		return 1;
+	}
 	return 0;
 
 }
