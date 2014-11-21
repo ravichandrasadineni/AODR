@@ -31,7 +31,6 @@ char* marshallMessage(DataPacket packet) {
 	strncat(marshelledMessage,forceRouteStr,strlen(forceRouteStr));
 	strncat(marshelledMessage, DELIMETER,strlen(DELIMETER));
 	strncat(marshelledMessage,packet.message,strlen(packet.message));
-	printf("Marshelled message in marshalling is %s \n",marshelledMessage );
 	return marshelledMessage;
 }
 

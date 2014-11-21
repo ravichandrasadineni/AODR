@@ -37,13 +37,8 @@ void sendRREQonOtherInterfaces(ODRFrame currentFrame, int listenedSocket,int *if
 		if(ifSockets[i]!= listenedSocket) {
 			getSourceMacForInterface( ifSockets[i],  currentFrame.header.sourceAddress);
 			memcpy(currentFrame.header.destAddress,BRODCAST_MAC, HADDR_LEN);
-			printf("ODRUtility.c  : Source Mac Address is : ");
-			printMacAddress(currentFrame.header.sourceAddress);
-			printf("ODRUtility.c  : Destination Mac Address is :");
-			printMacAddress(currentFrame.header.destAddress);
 			char* frame = buildRREQ(currentFrame);
 			send_rawpacket(ifSockets[i], frame);
-			printf("ODRDataPacketManager.c  :FRAME SENT IS  %s \n",frame);
 			free(frame);
 		}
 	}

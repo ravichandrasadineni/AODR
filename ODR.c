@@ -15,12 +15,43 @@ int getSetSocket(int *ifSockets, int numOfInf, fd_set *readSet) {
 	return -1;
 }
 
+int shoudAddRoute(ODRFrame currentFrame) {
+
+	if(currentFrame.header.packetType == PACKET_MSG) {
+		return 1;
+	}
+	// If packet is destined to me then the route should have been already added
+	// Else Add the route
+	if(currentFrame.header.packetType == PACKET_RREP) {
+		char localAddress[INET_ADDRSTRLEN];
+		populateLocalAddress(localAddress);
+		if (!strncmp(currentFrame.data.destination,localAddress, INET_ADDRSTRLEN)) {
+			return 0;
+		}
+		return 1;
+
+	}
+	// ONLY RREQ LEFT
+	if(!isObselete(currentFrame.data.source,currentFrame.header.Broadcastid)) {
+		printf("ODR.C : RREQ  adding route \n");
+		return 1;
+	}
+	if(isSameBroadCastId(currentFrame.data.source,currentFrame.header.Broadcastid)) {
+		int currentHopCount = getHopCountForROute(currentFrame.header.sourceAddress);
+		if(currentHopCount  > currentFrame.header.hopcount){
+			return 1;
+		}
+	}
+
+	return 0;
+
+}
+
 
 int main(int argc,char *argv[]){
 	int *ifSockets, numOFInf, udsSocket;
 	createAndBindSocketsTOInterfaces(&ifSockets,&numOFInf);
 	udsSocket = createAndBindUDS();
-	printf("udsSocket is %d \n", udsSocket);
 	int timeOutSecs = getTimeOut(argc, argv);
 	setExpiryTimeForRoutingTable(timeOutSecs);
 	initializeportMap(timeOutSecs);
@@ -30,16 +61,12 @@ int main(int argc,char *argv[]){
 		getListeningSet(&readSet,&maxfd,ifSockets,numOFInf,udsSocket);
 		if((select(maxfd,&readSet,NULL,NULL,NULL))<0) {
 			perror("Select on ODR FAILED");
-
 		}
 		if (FD_ISSET(udsSocket,&readSet)) {
 			DataPacket  currentDataPacket;
 			struct sockaddr_un cliaddr;
 			currentDataPacket = getData(udsSocket, &cliaddr);
-			printf("ODR.c:client FIle path is %s \n", cliaddr.sun_path);
 			currentDataPacket.sourcePort = generatePortNumber(cliaddr.sun_path);
-			printf("ODR.c:currentDataPacket mesage is %s \n", currentDataPacket.message);
-			printf("ODR.c: SourcePortNumber and DestinationPortNumber before sending is %d %d\n", currentDataPacket.sourcePort, currentDataPacket.destinationPort);
 			sendDataPacket(currentDataPacket,udsSocket,ifSockets,numOFInf);
 
 		}
@@ -52,13 +79,7 @@ int main(int argc,char *argv[]){
 			//Increasing HopCount
 			currentFrame.header.hopcount +=1;
 
-
-
-			if(currentFrame.header.packetType == PACKET_RREQ) {
-
-				handleRREQ(currentFrame);
-			}
-			else if (currentFrame.header.packetType ==  PACKET_RREP) {
+			if (currentFrame.header.packetType ==  PACKET_RREQ) {
 				handleRREQ(currentFrame,setSocket,ifSockets,numOFInf);
 
 			}
@@ -66,18 +87,17 @@ int main(int argc,char *argv[]){
 				handleRREP(currentFrame,setSocket,ifSockets,numOFInf);
 			}
 
-			else if (currentFrame.header.packetType ==  PACKET_RREP)  {
-				handleDataPacket(currentFrame, setSocket,ifSockets,numOFInf);
-			}
-			//Adding Source Route To RoutingTable
-			if(currentFrame.header.packetType == PACKET_RREQ) {
-				if(!isObselete(currentFrame.data.source,currentFrame.header.Broadcastid)) {
-					addRoute(currentFrame.header.sourceAddress,currentFrame.data.source,setSocket,currentFrame.header.hopcount-1,currentFrame.data.forceRoute);
-				}
-			}
-			else {
+			//			else if (currentFrame.header.packetType ==  PACKET_MSG)  {
+			//				handleDataPacket(currentFrame, setSocket,ifSockets,numOFInf);
+			//			}
+			//if(shoudAddRoute(currentFrame)) {
+
 				addRoute(currentFrame.header.sourceAddress,currentFrame.data.source,setSocket,currentFrame.header.hopcount-1,currentFrame.data.forceRoute);
+			//}
+			if (!isObselete(currentFrame.header.sourceAddress,currentFrame.header.Broadcastid)) {
+				addToBroadCastList(currentFrame.data.source,currentFrame.header.Broadcastid);
 			}
+
 		}
 
 

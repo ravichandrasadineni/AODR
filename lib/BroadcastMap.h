@@ -21,5 +21,5 @@ typedef struct brocastList bList;
 
 int isObselete( char [INET_ADDRSTRLEN],int brodcastId);
 int addToBroadCastList( char[INET_ADDRSTRLEN],int brodcastId);
-
+int isSameBroadCastId( char ipAddress[INET_ADDRSTRLEN], int brodcastId);
 #endif /* LIB_BROADCASTMAP_H_ */

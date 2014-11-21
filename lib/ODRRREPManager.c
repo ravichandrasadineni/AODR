@@ -7,10 +7,8 @@
 #include "ODRRREPManager.h"
 
 int shouldSendRREQ(ODRFrame currentFrame){
-	char localAddress[INET_ADDRSTRLEN];
-	populateLocalAddress(localAddress);
 	//If route doesn't exist Send RREQ
-	if(!doesRouteExist(localAddress)){
+	if(!doesRouteExist(currentFrame.data.destination)){
 		return 1;
 	}
 
@@ -37,8 +35,10 @@ int isDestination(ODRFrame currentFrame){
 
 //handleRREP(currentFrame,setSocket,*ifSockets,numOFInf);
 void handleRREP(ODRFrame currentFrame, int listenedSocket, int *ifSockets, int numofInter){
+	printf("Recieved RREP \n");
 	if(isDestination(currentFrame)){
 		printf("Sending packet in Parked Buffer :");
+		addRoute(currentFrame.header.sourceAddress,currentFrame.data.source,listenedSocket,currentFrame.header.hopcount-1,currentFrame.data.forceRoute);
 		sendPacketWaitingInBuffer();
 	}
 	else if(canForwardRREP(currentFrame)){
@@ -53,7 +53,7 @@ void handleRREP(ODRFrame currentFrame, int listenedSocket, int *ifSockets, int n
 	}
 	else if(shouldSendRREQ(currentFrame)){
 		char sourceMacAddr[HADDR_LEN], sourceIPAddr[INET_ADDRSTRLEN];
-		//Parking data into buffer
+		//Parking RREP into buffer
 		parkIntoBuffer(currentFrame.data);
 		//Rebuilding RREQ from the currentFrame
 		getSourceMacForInterface(listenedSocket,sourceMacAddr);
@@ -61,7 +61,6 @@ void handleRREP(ODRFrame currentFrame, int listenedSocket, int *ifSockets, int n
 		memcpy(currentFrame.header.destAddress, BRODCAST_MAC, HADDR_LEN);
 		currentFrame.header.RREPSent = 0;
 		currentFrame.header.hopcount = 0;
-		currentFrame.header.packetType = ETH_TYPE;
 		currentFrame.header.Broadcastid = 0;
 		populateLocalAddress(sourceIPAddr);
 		memcpy(currentFrame.data.source, sourceIPAddr, INET_ADDRSTRLEN);

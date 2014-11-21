@@ -14,7 +14,7 @@ int shoudForwardRREQ(ODRFrame currentFrame, int numOFInf) {
 	}
 	// If the route doesn't exist for the source router.  forward
 	if (!doesRouteExist(currentFrame.data.source)) {
-		printf("ODRRREQMANAGER.C : RREQ does not exist for the destination \n");
+		printf("ODRRREQMANAGER.C : ROUTE does not exist for the destination \n");
 		return 1;
 	}
 
@@ -98,7 +98,6 @@ void sendRREP(int listenedSocket, ODRFrame currentFrame) {
 	currentFrame.data.destinationPort = tempport;
 	// NEW RREP SETTING HOP COUNT TO 0
 	currentFrame.header.hopcount = 0;
-	printFrame(currentFrame);
 	char* rrepFrame = buildRREP(currentFrame);
 	send_rawpacket(listenedSocket,rrepFrame);
 	free(rrepFrame);
@@ -110,7 +109,6 @@ void handleRREQ(ODRFrame currentFrame, int listenedSocket, int *ifSockets,
 		printf("ODRRREQMANAGER.C : Obselete RREQ Packet,Ignoring\n");
 		return;
 	}
-	addToBroadCastList(currentFrame.data.source,currentFrame.header.Broadcastid);
 	printf("ODRRREQMANAGER.C : Recieved RREQ \n");
 	if (shouldSendRREP(currentFrame)) {
 		printf("ODRRREQMANAGER.C : sending RREP\n");

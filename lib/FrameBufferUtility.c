@@ -87,6 +87,7 @@ char* buildRREQ(ODRFrame currentFrame){
 	char* dataPayLoad = MarshalledFramePayload(currentFrame);
 	buildFrame(currentFrame.header.sourceAddress, currentFrame.header.destAddress, dataPayLoad,frame);
 	free(dataPayLoad);
+	printFrame(currentFrame);
 	return frame;
 }
 
@@ -98,6 +99,7 @@ char* buildRREP(ODRFrame currentFrame){
 	char* dataPayLoad = MarshalledFramePayload(currentFrame);
 	buildFrame(currentFrame.header.sourceAddress, currentFrame.header.destAddress, dataPayLoad,frame);
 	free(dataPayLoad);
+	printFrame(currentFrame);
 	return frame;
 }
 
@@ -110,6 +112,7 @@ char* buildMessageFrame(ODRFrame currentFrame){
 	char* dataPayLoad = MarshalledFramePayload(currentFrame);
 	buildFrame(currentFrame.header.sourceAddress, currentFrame.header.destAddress, dataPayLoad,frame);
 	free(dataPayLoad);
+	printFrame(currentFrame);
 	return frame;
 }
 

@@ -22,8 +22,24 @@ int isObselete( char ipAddress[INET_ADDRSTRLEN], int brodcastId) {
 		currentBrdElement = currentBrdElement->next;
 	}
 	return 0;
-
 }
+
+int isSameBroadCastId( char ipAddress[INET_ADDRSTRLEN], int brodcastId) {
+	if(bListHead  == NULL)
+		return 0;
+	bList* currentBrdElement = bListHead;
+	while(currentBrdElement !=NULL) {
+		if(!strncmp(currentBrdElement->sourceAddr,ipAddress,INET_ADDRSTRLEN)) {
+			if(currentBrdElement->brodcastId == brodcastId) {
+				return 1;
+			}
+		}
+		currentBrdElement = currentBrdElement->next;
+	}
+	return 0;
+}
+
+
 void deleteExistingEntry(char ipaddress[INET_ADDRSTRLEN], int brodcastId) {
 	if(bListHead  == NULL)
 		return ;

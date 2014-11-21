@@ -14,7 +14,6 @@ void  getSourceMacForInterface(int sockFd, char sourceMac[HADDR_LEN] ) {
 	memset(sourceMac,'\0',HADDR_LEN);
 	for(i=0; i < sockInfMapsize; i++) {
 		if(sockToInfMapper[i].sockfd == sockFd) {
-			printf("ODRScocketUtility.c : The source mac address is %s \n",sockToInfMapper[i].sourceMac);
 			memcpy(sourceMac,sockToInfMapper[i].sourceMac,HADDR_LEN);
 			return;
 		}
@@ -82,7 +81,6 @@ void createAndBindSocketsTOInterfaces(int** sockets, int* number) {
 		int sockfd = createNewSocket();
 		struct sockaddr_ll sADDR;
 		memset(&sADDR,'\0', sizeof(sADDR));
-		printf("The interface is %d \n", ifList->if_index );
 		sADDR.sll_ifindex =ifList->if_index ;
 		sADDR.sll_halen = ETH_ALEN;
 		sADDR.sll_protocol = htons(ETH_TYPE);
@@ -93,7 +91,6 @@ void createAndBindSocketsTOInterfaces(int** sockets, int* number) {
 		}
 		sockToInfMapper[sockInfMapsize].sockfd = sockfd;
 		memcpy(sockToInfMapper[sockInfMapsize].sourceMac,ifList->if_haddr,HADDR_LEN);
-		printMacAddress(sockToInfMapper[sockInfMapsize].sourceMac);
 		(*sockets)[i]= sockfd;
 		ifList = ifList->next;
 		sockInfMapsize++;

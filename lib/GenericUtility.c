@@ -32,19 +32,19 @@ void printMacAddress (char haddr[HADDR_LEN]) {
 }
 
 void printFrame (ODRFrame receivedFrame) {
-	printf("Destination  Mac Address :");
+	printf("DMA :");
 	printMacAddress(receivedFrame.header.destAddress);
-	printf("Source Mac Address :");
+	printf("SMA:");
 	printMacAddress(receivedFrame.header.sourceAddress);
-	printf("PACKET TYPE :%d \n",receivedFrame.header.packetType);
-	printf("HOP COUNT:%d \n",receivedFrame.header.hopcount);
-	printf("BROADCAST ID:%d \n",receivedFrame.header.Broadcastid);
-	printf("IS RREPSENT :%d \n",receivedFrame.header.RREPSent);
-	printf("SOURCE IP:%s \n",receivedFrame.data.source);
-	printf("Destination IP:%s \n",receivedFrame.data.destination);
-	printf("Source Port:%d \n",receivedFrame.data.sourcePort);
-	printf("Destination Port:%d \n",receivedFrame.data.destinationPort);
-	printf("Force Route :%d \n",receivedFrame.data.forceRoute);
+	printf("PTYP :%d \t",receivedFrame.header.packetType);
+	printf("HOPC:%d \t",receivedFrame.header.hopcount);
+	printf("BID:%d \t",receivedFrame.header.Broadcastid);
+	printf("RREPS:%d \t",receivedFrame.header.RREPSent);
+	printf("SIP:%s \t",receivedFrame.data.source);
+	printf("DIP:%s \t",receivedFrame.data.destination);
+	printf("SP:%d \t",receivedFrame.data.sourcePort);
+	printf("DP:%d \t",receivedFrame.data.destinationPort);
+	printf("FR :%d \t",receivedFrame.data.forceRoute);
 	printf("Message:%s \n",receivedFrame.data.message);
 
 }

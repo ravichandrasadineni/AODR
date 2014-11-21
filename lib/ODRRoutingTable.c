@@ -165,7 +165,7 @@ int doesRouteExist(char destinationAddress[INET_ADDRSTRLEN]) {
 	}
 	else  {
 		while(currentPosition != NULL) {
-			if(strncmp(currentPosition->destinationIPAddress,destinationAddress,6)) {
+			if(!strncmp(currentPosition->destinationIPAddress,destinationAddress,INET_ADDRSTRLEN)) {
 
 				return 1;
 
@@ -185,7 +185,7 @@ int getOutInfForDest(char destinationAddress[INET_ADDRSTRLEN]) {
 	}
 	else  {
 		while(currentPosition != NULL) {
-			if(strncmp(currentPosition->destinationIPAddress,destinationAddress,6)) {
+			if(!strncmp(currentPosition->destinationIPAddress,destinationAddress,6)) {
 				return currentPosition->socketId;
 
 			}
@@ -205,7 +205,7 @@ int getHopCountForROute(char destinationAddress[INET_ADDRSTRLEN]) {
 	}
 	else  {
 		while(currentPosition != NULL) {
-			if(strncmp(currentPosition->destinationIPAddress,destinationAddress,6)) {
+			if(!strncmp(currentPosition->destinationIPAddress,destinationAddress,6)) {
 				return currentPosition->hopcount;
 
 			}
@@ -223,7 +223,7 @@ void populateDestMacAddressForRoute(char destinationAddress[INET_ADDRSTRLEN], ch
 	}
 	else  {
 		while(currentPosition != NULL) {
-			if(strncmp(currentPosition->destinationIPAddress,destinationAddress,HADDR_LEN)) {
+			if(!strncmp(currentPosition->destinationIPAddress,destinationAddress,HADDR_LEN)) {
 				memcpy(destMacAddress,currentPosition->destinationMACAddress,HADDR_LEN);
 
 			}
@@ -241,7 +241,7 @@ int getHopCountIfRouteExist(char destinationIpAddress[INET_ADDRSTRLEN]) {
 	}
 	else  {
 		while(currentPosition != NULL) {
-			if(strncmp(currentPosition->destinationIPAddress,destinationIpAddress,INET_ADDRSTRLEN)) {
+			if(!strncmp(currentPosition->destinationIPAddress,destinationIpAddress,INET_ADDRSTRLEN)) {
 				return currentPosition->hopcount;
 
 			}

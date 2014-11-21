@@ -75,8 +75,8 @@ void sendDataFrame(DataPacket packet ) {
 	getSourceMacForInterface( outgoingSocket,  currentFrame.header.sourceAddress);
 	currentFrame.header.hopcount=0;
 	char* frame = buildMessageFrame(currentFrame);
+	printf("ODRPacketManager.c :Sending data Packet:");
 	send_rawpacket(outgoingSocket,frame);
-	printf("ODRDataPacketManager.c :FRAME SENT IS  %s \n",frame);
 	free(frame);
 }
 
@@ -98,7 +98,7 @@ void sendDataPacket(DataPacket packet,int udsSocket,int *ifSockets,int numOFInf)
 			sendDataFrame(packet);
 		}
 		else {
-			printf("Route does not exist \n");
+			printf("ODRDataPacketManager.c : Route does not exist \n");
 			parkIntoBuffer(packet);
 			ODRFrame currentFrame;
 			currentFrame.data= packet;
@@ -123,9 +123,11 @@ void removeParkedPacket(int i) {
 
 void sendPacketWaitingInBuffer()  {
 	int i;
+	printf("Size of ParkedBuffer is %d \n",currentParkingBufferSize);
 	for(i=0; i<currentParkingBufferSize; ){
 		DataPacket currentParkedPacket;
 		currentParkedPacket = parkingBuffer[i];
+
 		if(doesRouteExist(currentParkedPacket.destination)) {
 			sendDataFrame(currentParkedPacket);
 			removeParkedPacket(i);
