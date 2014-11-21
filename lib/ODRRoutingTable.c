@@ -226,7 +226,7 @@ void populateDestMacAddressForRoute(char destinationAddress[INET_ADDRSTRLEN], ch
 	}
 	else  {
 		while(currentPosition != NULL) {
-			if(!strncmp(currentPosition->destinationIPAddress,destinationAddress,HADDR_LEN)) {
+			if(!strncmp(currentPosition->destinationIPAddress,destinationAddress,INET_ADDRSTRLEN)) {
 				memcpy(destMacAddress,currentPosition->destinationMACAddress,HADDR_LEN);
 				return;
 
