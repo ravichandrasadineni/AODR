@@ -208,7 +208,7 @@ int getHopCountForROute(char destinationAddress[INET_ADDRSTRLEN]) {
 	}
 	else  {
 		while(currentPosition != NULL) {
-			if(!strncmp(currentPosition->destinationIPAddress,destinationAddress,6)) {
+			if(!strncmp(currentPosition->destinationIPAddress,destinationAddress,INET_ADDRSTRLEN)) {
 				return currentPosition->hopcount;
 
 			}
