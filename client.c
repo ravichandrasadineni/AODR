@@ -15,7 +15,7 @@ void printTimeoutMessage(char* destinationVm) {
 	char localHostname[1024];
 	gethostname(localHostname, 1023);
 	ticks= time(NULL);
-	printf("client at node  %s timeout on response from %s \n", localHostname,destinationVm);
+	printf("client at node  %s received timeout on response from %s \n", localHostname,destinationVm);
 
 }
 
@@ -23,7 +23,7 @@ void printTimeoutMessage(char* destinationVm) {
 void printMessageSend(char* userchoice) {
 	char localHostname[1024];
 	gethostname(localHostname, 1023);
-	printf("sending message from %s to %s \n",localHostname,userchoice);
+	printf("client at %s sending message to %s \n",localHostname,userchoice);
 }
 
 
