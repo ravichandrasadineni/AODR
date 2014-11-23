@@ -128,6 +128,7 @@ void sendDataPacket(DataPacket packet,int udsSocket,int *ifSockets,int numOFInf)
 			dataFrame.data.forceRoute = OFF;
 			dataFrame.header.hopcount = 0;
 			dataFrame.header.packetType = PACKET_MSG;
+			dataFrame.header.RREPSent = OFF;
 			parkIntoBuffer(dataFrame);
 			memcpy(currentFrame.header.destAddress,BRODCAST_MAC, HADDR_LEN);
 			currentFrame.header.hopcount=0;
