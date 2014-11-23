@@ -11,7 +11,7 @@
 #define ODR_SERVER "/tmp/rsadineni-odrServer"
 #define ODR_CLIENT_PRE "/tmp/file-XXXXXX"
 #define	HADDR_LEN 6	/* same as IFHWADDRLEN in <net/if.h> */
-#define DELIMETER ":::"
+#define DELIMETER "***"
 #define DATAPACKET_BUFFER_SIZE 1024
 #define ETHERNET0 "eth0"
 #define LOOPBACKIF "lo"
