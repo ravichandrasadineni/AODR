@@ -9,7 +9,7 @@
 
 int timeOutSecs =0;
 int CURRENT_BRODCAST_ID= 0;
-DataPacket parkingBuffer[DATAPACKET_BUFFER_SIZE];
+ODRFrame parkingBuffer[DATAPACKET_BUFFER_SIZE];
 int currentParkingBufferSize =0;
 void intializeBufferTimeOut(int timeOut) {
 	timeOutSecs = timeOut;
@@ -56,7 +56,7 @@ void handleDataPacket(ODRFrame currentFrame, int listenedSocket, int *ifSockets,
 	}
 	else {
 		//Parking data..send RREQ
-		parkIntoBuffer(currentFrame.data);
+		parkIntoBuffer(currentFrame);
 		char sourceMacAddr[HADDR_LEN], localAddress[INET_ADDRSTRLEN];
 		//Assigning values to header of new RREQ
 		getSourceMacForInterface(listenedSocket, sourceMacAddr);
@@ -73,6 +73,21 @@ void handleDataPacket(ODRFrame currentFrame, int listenedSocket, int *ifSockets,
 	}
 }
 
+void sendFrameInParkedBuffer(ODRFrame currentFrame, int outGoingSocket,char destMacAddress[HADDR_LEN]){
+	char* frame;
+	getSourceMacForInterface(outGoingSocket, currentFrame.header.sourceAddress);
+	memcpy(currentFrame.header.destAddress, destMacAddress, HADDR_LEN);
+	if(currentFrame.header.packetType == PACKET_MSG){
+		frame = buildMessageFrame(currentFrame);
+	}
+	else if(currentFrame.header.packetType == PACKET_RREP){
+		frame = buildRREP(currentFrame);
+	}
+	send_rawpacket(outGoingSocket, frame);
+	free(frame);
+}
+
+
 void sendDataFrame(DataPacket packet ) {
 	ODRFrame currentFrame;
 	currentFrame.data= packet;
@@ -86,8 +101,8 @@ void sendDataFrame(DataPacket packet ) {
 	free(frame);
 }
 
-void parkIntoBuffer(DataPacket packet) {
-	parkingBuffer[currentParkingBufferSize] = packet;
+void parkIntoBuffer(ODRFrame frame) {
+	parkingBuffer[currentParkingBufferSize] = frame;
 	currentParkingBufferSize ++;
 }
 
@@ -106,11 +121,14 @@ void sendDataPacket(DataPacket packet,int udsSocket,int *ifSockets,int numOFInf)
 		else {
 			printf("ODRDataPacketManager.c : Route does not exist \n");
 
-			ODRFrame currentFrame;
+			ODRFrame currentFrame, dataFrame;
 			currentFrame.data= packet;
+			dataFrame.data = packet;
 			//Switching off force route in the packet before storing into Parked Buffer
-			packet.forceRoute = OFF;
-			parkIntoBuffer(packet);
+			dataFrame.data.forceRoute = OFF;
+			dataFrame.header.hopcount = 0;
+			dataFrame.header.packetType = PACKET_MSG;
+			parkIntoBuffer(dataFrame);
 			memcpy(currentFrame.header.destAddress,BRODCAST_MAC, HADDR_LEN);
 			currentFrame.header.hopcount=0;
 			currentFrame.header.Broadcastid = CURRENT_BRODCAST_ID;
@@ -130,15 +148,15 @@ void removeParkedPacket(int i) {
 	currentParkingBufferSize--;
 }
 
-void sendPacketWaitingInBuffer()  {
+void sendPacketWaitingInBuffer(int outGoingSocket, char destMacAddr[HADDR_LEN], char destIPAddress[INET_ADDRSTRLEN])  {
 	int i;
 	printf("Size of ParkedBuffer is %d \n",currentParkingBufferSize);
 	for(i=0; i<currentParkingBufferSize; ){
-		DataPacket currentParkedPacket;
-		currentParkedPacket = parkingBuffer[i];
+		ODRFrame currentFrame;
+		currentFrame = parkingBuffer[i];
 
-		if(doesRouteExist(currentParkedPacket.destination)) {
-			sendDataFrame(currentParkedPacket);
+		if(!strncmp(currentFrame.data.destination, destIPAddress, INET_ADDRSTRLEN)) {
+			sendFrameInParkedBuffer(currentFrame, outGoingSocket, destMacAddr);
 			removeParkedPacket(i);
 			//we have removed the current packet. so the next packet will be in the current position
 		}

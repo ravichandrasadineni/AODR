@@ -19,14 +19,7 @@ int shoudAddRoute(ODRFrame currentFrame) {
 	if(currentFrame.header.packetType == PACKET_MSG) {
 		return 1;
 	}
-	// If packet is destined to me then the route should have been already added
-	// Else Add the route
 	if(currentFrame.header.packetType == PACKET_RREP) {
-		char localAddress[INET_ADDRSTRLEN];
-		populateLocalAddress(localAddress);
-		if (!strncmp(currentFrame.data.destination,localAddress, INET_ADDRSTRLEN)) {
-			return 0;
-		}
 		return 1;
 	}
 	printf("ODR.C :Before checking RREQ condition \n");

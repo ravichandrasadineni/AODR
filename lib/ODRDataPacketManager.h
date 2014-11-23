@@ -19,12 +19,12 @@
 #include "AddressUtility.h"
 
 void intializeBufferTimeOut(int timeOut);
-void parkIntoBuffer(DataPacket packet);
+void parkIntoBuffer(ODRFrame frame);
 void sendDataPacket(DataPacket packet,int udsSocket,int *ifSockets,int numOFInf);
 int isPacketWaitingForDestination(char destiNationAddress[INET_ADDRSTRLEN]);
 void RetrievePacketsForDestination(char destiNationAddress[INET_ADDRSTRLEN], DataPacket *destinationPackets);
 void handleDataPacket(ODRFrame currentFrame, int listenedSocket, int *ifSockets, int numOFInf, int udsSocket);
-void sendPacketWaitingInBuffer();
+void sendPacketWaitingInBuffer(int outGoingSocket, char destMacAddr[HADDR_LEN], char destIPAddress[INET_ADDRSTRLEN]);
 
 
 #endif /* LIB_ODRDATAPACKETMANAGER_H_ */

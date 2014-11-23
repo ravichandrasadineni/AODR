@@ -38,8 +38,7 @@ void handleRREP(ODRFrame currentFrame, int listenedSocket, int *ifSockets, int n
 	printf("Recieved RREP \n");
 	if(isDestination(currentFrame)){
 		printf("Sending packet in Parked Buffer :\n");
-		addRoute(currentFrame.header.sourceAddress,currentFrame.data.source,listenedSocket,currentFrame.header.hopcount-1,currentFrame.data.forceRoute);
-		sendPacketWaitingInBuffer();
+		sendPacketWaitingInBuffer(listenedSocket, currentFrame.header.sourceAddress, currentFrame.data.source);
 	}
 	else if(canForwardRREP(currentFrame)){
 		printf("Forwarding RREP:\n");
@@ -56,7 +55,7 @@ void handleRREP(ODRFrame currentFrame, int listenedSocket, int *ifSockets, int n
 	else if(shouldSendRREQ(currentFrame)){
 		char sourceMacAddr[HADDR_LEN], sourceIPAddr[INET_ADDRSTRLEN];
 		//Parking RREP into buffer
-		parkIntoBuffer(currentFrame.data);
+		parkIntoBuffer(currentFrame);
 		//Rebuilding RREQ from the currentFrame
 		getSourceMacForInterface(listenedSocket,sourceMacAddr);
 		memcpy(currentFrame.header.sourceAddress, sourceMacAddr, HADDR_LEN);
