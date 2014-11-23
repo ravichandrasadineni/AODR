@@ -19,7 +19,7 @@ void setExpiryTimeForRoutingTable(int secs) {
 void printRoutingTable() {
 	routeEntry* currentPosition = routeTableHead;
 	if(routeTableHead == NULL) {
-		printf("No entries \n");
+		//printf("No entries \n");
 	}
 	else  {
 		while(currentPosition != NULL) {
@@ -39,8 +39,8 @@ void printRoutingTable() {
 
 void addRoute(char destinationMACAddress[HADDR_LEN],char destinationIPAddress[INET_ADDRSTRLEN],  int socketId,int hopcount, int forceroute) {
 	deleteTimeoutEnries();
-	printf("Before adding Route \n");
-	printRoutingTable();
+//	printf("Before adding Route \n");
+	//printRoutingTable();
 	if(routeTableHead == NULL) {
 		routeTableHead= (routeEntry*)allocate_void(sizeof(routeEntry));
 		routeTableTail = routeTableHead;
@@ -72,8 +72,8 @@ void addRoute(char destinationMACAddress[HADDR_LEN],char destinationIPAddress[IN
 	strncpy(routeTableTail->destinationIPAddress,destinationIPAddress,INET_ADDRSTRLEN);
 	routeTableTail->timeCreated = time(NULL);
 	memcpy(routeTableTail->destinationMACAddress,destinationMACAddress,HADDR_LEN);
-	printf("After adding Route \n");
-	printRoutingTable();
+//	printf("After adding Route \n");
+//	printRoutingTable();
 
 }
 
@@ -100,8 +100,8 @@ void deleteRoute(char destinationIPAddress[INET_ADDRSTRLEN]) {
 
 
 void deleteRouteEntry(routeEntry* currentPosition, routeEntry* prevPosition ) {
-	printf("ODRROUTINGTABLE.C : Before deleting Route \n");
-	printRoutingTable();
+//	printf("ODRROUTINGTABLE.C : Before deleting Route \n");
+//	printRoutingTable();
 	if(routeTableHead == NULL) {
 		return ;
 	}
@@ -111,15 +111,15 @@ void deleteRouteEntry(routeEntry* currentPosition, routeEntry* prevPosition ) {
 			free(routeTableHead);
 			routeTableHead = NULL;
 			routeTableTail = NULL;
-			printf("ODRROUTINGTABLE.C :After deleting Route \n");
-			printRoutingTable();
+//			printf("ODRROUTINGTABLE.C :After deleting Route \n");
+//			printRoutingTable();
 			return;
 		}
 		else {
 			routeTableHead = routeTableHead->next;
 			free(currentPosition);
-			printf("ODRROUTINGTABLE.C :After deleting Route \n");
-			printRoutingTable();
+//			printf("ODRROUTINGTABLE.C :After deleting Route \n");
+//			printRoutingTable();
 			return;
 		}
 	}
@@ -132,8 +132,8 @@ void deleteRouteEntry(routeEntry* currentPosition, routeEntry* prevPosition ) {
 		prevPosition->next = currentPosition->next;
 		free(currentPosition);
 	}
-	printf("ODRROUTINGTABLE.C :After deleting Route \n");
-	printRoutingTable();
+//	printf("ODRROUTINGTABLE.C :After deleting Route \n");
+//	printRoutingTable();
 }
 
 int isTimeExpired(time_t currentTime) {
@@ -189,8 +189,8 @@ int getOutInfForDest(char destinationAddress[INET_ADDRSTRLEN]) {
 	else  {
 		while(currentPosition != NULL) {
 			if(!strncmp(currentPosition->destinationIPAddress,destinationAddress,INET_ADDRSTRLEN)) {
-				printf("Destination Ip Address is %s \n",currentPosition->destinationIPAddress);
-				printf("Destination socket Id is %d \n",currentPosition->socketId);
+//				printf("Destination Ip Address is %s \n",currentPosition->destinationIPAddress);
+//				printf("Destination socket Id is %d \n",currentPosition->socketId);
 				return currentPosition->socketId;
 			}
 			currentPosition = currentPosition->next;

@@ -9,21 +9,21 @@
 int shoudForwardRREQ(ODRFrame currentFrame, int numOFInf) {
 	// IF only interface don't bother to forward
 	if (numOFInf == 1) {
-		printf("ODRRREQMANAGER.C : Only one interface for the node\n");
+//		printf("ODRRREQMANAGER.C : Only one interface for the node\n");
 		return 0;
 	}
 	// If the route doesn't exist for the source router.  forward
 	if (!doesRouteExist(currentFrame.data.source)) {
-		printf("ODRRREQMANAGER.C : ROUTE does not exist for the destination \n");
+//		printf("ODRRREQMANAGER.C : ROUTE does not exist for the destination \n");
 		return 1;
 	}
 
 	// If the hopCount for the source  is less. forward
 	int hopCount = getHopCountForROute(currentFrame.data.source);
 	if (hopCount >= (currentFrame.header.hopcount - 1)) {
-		printf("ODRRREQMANAGER.C : Old route has same or less hop count than current Route\n");
+//		printf("ODRRREQMANAGER.C : Old route has same or less hop count than current Route\n");
 	} else {
-		printf("ODRRREQMANAGER.C : Heard a better route to source\n");
+//		printf("ODRRREQMANAGER.C : Heard a better route to source\n");
 		return 1;
 
 	}
@@ -32,7 +32,7 @@ int shoudForwardRREQ(ODRFrame currentFrame, int numOFInf) {
 	char localAddress[INET_ADDRSTRLEN];
 	populateLocalAddress(localAddress);
 	if (!strcmp(localAddress, currentFrame.data.destination)) {
-		printf("ODRRREQMANAGER.C : RREQ DESTINED TO ME\n");
+//		printf("ODRRREQMANAGER.C : RREQ DESTINED TO ME\n");
 		return 0;
 	}
 
@@ -56,7 +56,7 @@ int shoudForwardRREQ(ODRFrame currentFrame, int numOFInf) {
 int shouldSendRREP(ODRFrame currentFrame) {
 	// If RREP already sent, don't bother
 	if (currentFrame.header.RREPSent == 1) {
-		printf("ODRRREQMANAGER.C : RREP Sent set to 1 in the received packet \n");
+//		printf("ODRRREQMANAGER.C : RREP Sent set to 1 in the received packet \n");
 		return 0;
 	}
 
@@ -64,7 +64,7 @@ int shouldSendRREP(ODRFrame currentFrame) {
 	char localAddress[INET_ADDRSTRLEN];
 	populateLocalAddress(localAddress);
 	if (!strcmp(localAddress, currentFrame.data.destination)) {
-		printf("ODRRREQMANAGER.C : RREQ destined to me\n");
+//		printf("ODRRREQMANAGER.C : RREQ destined to me\n");
 
 		return 1;
 	}
@@ -72,7 +72,7 @@ int shouldSendRREP(ODRFrame currentFrame) {
 	if (doesRouteExist(currentFrame.data.destination)) {
 		// If force route set. Don't bother since you are not the destination
 		if (currentFrame.data.forceRoute == 1) {
-			printf("ODRRREQMANAGER.C : FORCE ROUTE SET TO 1\n");
+//			printf("ODRRREQMANAGER.C : FORCE ROUTE SET TO 1\n");
 			return 0;
 		}
 		// send a RREP otherwise
@@ -111,21 +111,21 @@ void sendRREP(int listenedSocket, ODRFrame currentFrame) {
 void handleRREQ(ODRFrame currentFrame, int listenedSocket, int *ifSockets,
 		int numOFInf) {
 	if(isObselete(currentFrame.data.source,currentFrame.header.Broadcastid)) {
-		printf("ODRRREQMANAGER.C : Obselete RREQ Packet,Ignoring\n");
+//		printf("ODRRREQMANAGER.C : Obselete RREQ Packet,Ignoring\n");
 		return;
 	}
-	printf("ODRRREQMANAGER.C : Recieved RREQ \n");
+//	printf("ODRRREQMANAGER.C : Recieved RREQ \n");
 	if (shouldSendRREP(currentFrame)) {
-		printf("ODRRREQMANAGER.C : sending RREP\n");
+//		printf("ODRRREQMANAGER.C : sending RREP\n");
 
 		sendRREP(listenedSocket, currentFrame);
 	}
 	if (shoudForwardRREQ(currentFrame, numOFInf)) {
 		if (shouldSendRREP(currentFrame)) {
-			printf("ODRRREQMANAGER.C : RREPSent set to 1 \n");
+//			printf("ODRRREQMANAGER.C : RREPSent set to 1 \n");
 			currentFrame.header.RREPSent = 1;
 		}
-		printf("ODRRREQMANAGER.C : sending RREQ on all other interfaces\n");
+//		printf("ODRRREQMANAGER.C : sending RREQ on all other interfaces\n");
 		sendRREQonOtherInterfaces(currentFrame, listenedSocket, ifSockets,
 				numOFInf);
 	}

@@ -15,8 +15,8 @@ int isObselete( char ipAddress[INET_ADDRSTRLEN], int brodcastId) {
 	bList* currentBrdElement = bListHead;
 	while(currentBrdElement !=NULL) {
 		if(!strncmp(currentBrdElement->sourceAddr,ipAddress,INET_ADDRSTRLEN)) {
-			printf("BroadcastMap.c: source address in table is %s \n",currentBrdElement->sourceAddr );
-			printf("BroadcastMap.c: current ip address is %s \n",ipAddress);
+//			printf("BroadcastMap.c: source address in table is %s \n",currentBrdElement->sourceAddr );
+//			printf("BroadcastMap.c: current ip address is %s \n",ipAddress);
 			if(currentBrdElement->brodcastId >= brodcastId) {
 				return 1;
 			}

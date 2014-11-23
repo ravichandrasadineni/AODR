@@ -9,9 +9,9 @@
 #define ADDRESSUTILITY_H_
 #include "unp.h"
 #include <stdio.h>
+#include "GenericUtility.h"
 
 void getIpAddressFromDomainName(char* string, char* ipAddress) ;
-void getDomainName(char* ipAddressString, char* domainName);
 void populateLocalAddress(char localAddress[INET_ADDRSTRLEN]);
 
 

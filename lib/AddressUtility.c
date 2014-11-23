@@ -19,21 +19,7 @@ void populateLocalAddress(char localAddress[INET_ADDRSTRLEN]) {
 	getIpAddressFromDomainName(localHostname,localAddress);
 }
 
-
-void getDomainName(char* ipAddressString, char* domainName) {
-	struct hostent *he;
-	struct in_addr ipAddress;
-	inet_pton(AF_INET, ipAddressString, &ipAddress);
-	he = gethostbyaddr(&ipAddress, sizeof(ipAddress), AF_INET);
-	if(he == NULL)  {
-		printf(" No valid DomainName for the given IpAddress: %s \n",ipAddressString);
-		exit(1);
-	}
-	strncpy(domainName,he->h_name,strlen(he->h_name));
-}
-
-
- void getIpAddressFromDomainName(char* string, char* ipAddress) {
+void getIpAddressFromDomainName(char* string, char* ipAddress) {
 	struct hostent *he;
 	struct in_addr localHost;
 	struct in_addr **addr_list;

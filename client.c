@@ -23,7 +23,7 @@ void printTimeoutMessage(char* destinationVm) {
 void printMessageSend(char* userchoice) {
 	char localHostname[1024];
 	gethostname(localHostname, 1023);
-	printf("client at %s sending message to %s \n",localHostname,userchoice);
+	printf("client at node %s sending message to server at %s \n",localHostname,userchoice);
 }
 
 
@@ -45,7 +45,7 @@ int main(int argc, char*argv[]) {
 		FD_ZERO (&readSet);
 		getUserChoice(userchoice);
 		getIpAddressFromDomainName(userchoice,sendingPacket.destination);
-		printf("client.c : server IP Address is %s \n", sendingPacket.destination);
+//		printf("client.c : server IP Address is %s \n", sendingPacket.destination);
 		maxfd = clientSocket + 1;
 		while(1) {
 			FD_SET(clientSocket,&readSet);

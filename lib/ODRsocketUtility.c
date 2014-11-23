@@ -93,8 +93,8 @@ void createAndBindSocketsTOInterfaces(int** sockets, int* number) {
 		memcpy(sockToInfMapper[sockInfMapsize].sourceMac,ifList->if_haddr,HADDR_LEN);
 		(*sockets)[i]= sockfd;
 		ifList = ifList->next;
-		printf("%d ------>", sockToInfMapper[sockInfMapsize].sockfd);
-		printMacAddress(sockToInfMapper[sockInfMapsize].sourceMac);
+//		printf("%d ------>", sockToInfMapper[sockInfMapsize].sockfd);
+//		printMacAddress(sockToInfMapper[sockInfMapsize].sourceMac);
 		sockInfMapsize++;
 	}
 

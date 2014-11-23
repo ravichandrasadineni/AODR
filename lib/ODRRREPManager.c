@@ -35,13 +35,13 @@ int isDestination(ODRFrame currentFrame){
 
 //handleRREP(currentFrame,setSocket,*ifSockets,numOFInf);
 void handleRREP(ODRFrame currentFrame, int listenedSocket, int *ifSockets, int numofInter){
-	printf("Recieved RREP \n");
+//	printf("Recieved RREP \n");
 	if(isDestination(currentFrame)){
-		printf("Sending packet in Parked Buffer :\n");
+//		printf("Sending packet in Parked Buffer :\n");
 		sendPacketWaitingInBuffer(listenedSocket, currentFrame.header.sourceAddress, currentFrame.data.source);
 	}
 	else if(canForwardRREP(currentFrame)){
-		printf("Forwarding RREP:\n");
+//		printf("Forwarding RREP:\n");
 		char destMacAddr[HADDR_LEN], sourceMacAddr[HADDR_LEN];
 		populateDestMacAddressForRoute(currentFrame.data.destination,destMacAddr);
 		memcpy(currentFrame.header.destAddress,  destMacAddr, HADDR_LEN);

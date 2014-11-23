@@ -20,13 +20,13 @@ void printPortMapper(){
 	filePortMap* startPosition;
 	startPosition = filePortMapHead;
 	if(startPosition == NULL){
-		printf("FilePortMapper is empty \n");
+//		printf("FilePortMapper is empty \n");
 	}
 	else
 	{
-		printf("The contents of FilePortMapper is :\nPort\tFileName\t\tSavedTime\n");
+//		printf("The contents of FilePortMapper is :\nPort\tFileName\t\tSavedTime\n");
 		while(startPosition!=NULL){
-			printf("%d %s\t%.24s\r\n",startPosition->port,startPosition->fileName,ctime(&(startPosition->entryTime)));
+//			printf("%d %s\t%.24s\r\n",startPosition->port,startPosition->fileName,ctime(&(startPosition->entryTime)));
 			startPosition = startPosition->next;
 		}
 	}
@@ -37,7 +37,7 @@ int generatePortNumber(char *fileName) {
 	int isUniquePort =0;
 	while(!isUniquePort) {
 		int random = rand() % 2000;
-		printf("random port number is %d \n", random);
+//		printf("random port number is %d \n", random);
 		if(filePortMapHead == NULL) {
 			addEntry(random,fileName);
 			return random;
@@ -90,7 +90,7 @@ void addEntry(int port, char *fileName) {
 
 	filePortMapTail->entryTime = time(NULL);
 	strncpy(filePortMapTail->fileName,fileName,FILE_NAME_LENGTH);
-	printf("FilePortMapper.c : File Path after adding entry is %s \n",filePortMapTail->fileName);
+//	printf("FilePortMapper.c : File Path after adding entry is %s \n",filePortMapTail->fileName);
 	filePortMapTail->port= port;
 	filePortMapTail->next = NULL;
 	return ;

@@ -22,11 +22,11 @@ int getclientBindedsocket() {
 
 	strncpy(nameBuff,ODR_CLIENT_PRE ,FILE_NAME_LENGTH);
 	mkstemp(nameBuff);
-	printf("UDSUtility.c :nameBuff is %s \n",nameBuff);
+//	printf("UDSUtility.c :nameBuff is %s \n",nameBuff);
 	unlink(nameBuff);
 	cliaddr.sun_family = AF_LOCAL;
 	strncpy(cliaddr.sun_path,nameBuff,strlen(nameBuff));
-	printf("UDSUtility.c :cliaddr.sun_path is %s \n",cliaddr.sun_path);
+//	printf("UDSUtility.c :cliaddr.sun_path is %s \n",cliaddr.sun_path);
 	if(bind(sockfd,(SA *)&cliaddr, sizeof(cliaddr))<0) {
 		perror("Failed to Bind Unix Domain Socket :");
 		exit(0);

@@ -22,10 +22,10 @@ int shoudAddRoute(ODRFrame currentFrame) {
 	if(currentFrame.header.packetType == PACKET_RREP) {
 		return 1;
 	}
-	printf("ODR.C :Before checking RREQ condition \n");
+//	printf("ODR.C :Before checking RREQ condition \n");
 	// ONLY RREQ LEFT
 	if(!isObselete(currentFrame.data.source,currentFrame.header.Broadcastid)) {
-		printf("ODR.C : RREQ  adding route \n");
+//		printf("ODR.C : RREQ  adding route \n");
 		return 1;
 	}
 	if(isSameBroadCastId(currentFrame.data.source,currentFrame.header.Broadcastid)) {
@@ -34,7 +34,7 @@ int shoudAddRoute(ODRFrame currentFrame) {
 			return 1;
 		}
 	}
-	printf("ODR.C :RREQ is obselete \n");
+//	printf("ODR.C :RREQ is obselete \n");
 	return 0;
 
 }

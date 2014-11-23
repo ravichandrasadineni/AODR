@@ -40,11 +40,7 @@ typedef struct{
 
 
 void printFrame (ODRFrame receivedFrame) ;
-
-
-
-
-
+void getDomainName(char* ipAddressString, char* domainName);
 void getUserChoice(char choice[5]);
 void printMacAddress (char haddr[HADDR_LEN]);
 void intTochar( int number, char* string);
