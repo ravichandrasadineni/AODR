@@ -35,7 +35,7 @@ int main (int argc, char* argv) {
 		strncpy(sendPacket.destination,recvPacket.source,INET_ADDRSTRLEN);
 		sendPacket.destinationPort = recvPacket.sourcePort;
 		sendPacket.forceRoute = recvPacket.forceRoute;
-		currentTime = time(NULL);
+		 time(&currentTime);
 		strncpy(sendPacket.message, ctime(&currentTime), FRAME_BUFFER_LENGTH);
 		msg_send(sockfd,sendPacket);
 	}
