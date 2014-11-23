@@ -39,13 +39,13 @@ int main(int argc, char*argv[]) {
 	int isRetransmitted = 0;
 	strncpy(sendingPacket.message,MESSAGE, strlen(MESSAGE));
 	populateLocalAddress(sendingPacket.source);
+	clientSocket = getclientBindedsocket();
+	connectToODR(clientSocket);
 	while(1) {
 		FD_ZERO (&readSet);
 		getUserChoice(userchoice);
 		getIpAddressFromDomainName(userchoice,sendingPacket.destination);
 		printf("client.c : server IP Address is %s \n", sendingPacket.destination);
-		clientSocket = getclientBindedsocket();
-		connectToODR(clientSocket);
 		maxfd = clientSocket + 1;
 		while(1) {
 			FD_SET(clientSocket,&readSet);
