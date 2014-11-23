@@ -74,9 +74,8 @@ int main(int argc, char*argv[]) {
 			}
 		}
 		isRetransmitted =0;
-		unLinkSocket(clientSocket);
-		close(clientSocket);
-
 	}
+	unLinkSocket(clientSocket);
+	close(clientSocket);
 	return 0;
 }
