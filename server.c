@@ -22,12 +22,12 @@ void printRequest(char* clientIp) {
 
 int main (int argc, char* argv) {
 	int sockfd;
+	time_t currentTime;
 	DataPacket recvPacket, sendPacket;
 	populateLocalAddress(sendPacket.source);
 	sockfd = getServerBindedsocket();
 	connectToODR(sockfd);
 	while(1) {
-
 		msg_recv(sockfd,&recvPacket, NULL);
 		printRequest(recvPacket.source);
 		strncpy(sendPacket.source,recvPacket.destination,INET_ADDRSTRLEN);
@@ -35,7 +35,8 @@ int main (int argc, char* argv) {
 		strncpy(sendPacket.destination,recvPacket.source,INET_ADDRSTRLEN);
 		sendPacket.destinationPort = recvPacket.sourcePort;
 		sendPacket.forceRoute = recvPacket.forceRoute;
-		strncpy(sendPacket.message,recvPacket.message,FRAME_BUFFER_LENGTH);
+		currentTime = time(NULL);
+		strncpy(sendPacket.message, ctime(&currentTime), FRAME_BUFFER_LENGTH);
 		msg_send(sockfd,sendPacket);
 	}
 

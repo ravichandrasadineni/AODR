@@ -3,12 +3,10 @@
 #include "lib/UDSUtility.h"
 #define MESSAGE "Hello"
 
-void printRecievedMessage(char* destinationVm) {
-	time_t	ticks;
+void printRecievedMessage(char* destinationVm, char *time) {
 	char localHostname[1024];
 	gethostname(localHostname, 1023);
-	ticks= time(NULL);
-	printf("client at node %s: received from %s , %.24s \n", localHostname,destinationVm, ctime(&ticks));
+	printf("client at node %s: received from %s , %.24s \n", localHostname,destinationVm, time);
 
 }
 
@@ -49,7 +47,7 @@ int main(int argc, char*argv[]) {
 		clientSocket = getclientBindedsocket();
 		connectToODR(clientSocket);
 		maxfd = clientSocket + 1;
-		//while(1) {
+		while(1) {
 			FD_SET(clientSocket,&readSet);
 			tv.tv_sec = 2;
 			tv.tv_usec = 0;
@@ -61,12 +59,12 @@ int main(int argc, char*argv[]) {
 			}
 			if(FD_ISSET(clientSocket,&readSet)) {
 				msg_recv(clientSocket,&recievingPacket,NULL);
-				printRecievedMessage(userchoice);
+				printRecievedMessage(userchoice, recievingPacket.message);
 				break;
 			}
 			else {
 				if(isRetransmitted) {
-					sendingPacket.forceRoute = 1;
+					sendingPacket.forceRoute = 0;
 				}
 				else {
 					isRetransmitted = 1;
@@ -74,7 +72,7 @@ int main(int argc, char*argv[]) {
 				}
 				printTimeoutMessage(userchoice);
 			}
-		//}
+		}
 		isRetransmitted =0;
 		unLinkSocket(clientSocket);
 		close(clientSocket);
