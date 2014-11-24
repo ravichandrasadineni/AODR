@@ -36,9 +36,9 @@ void intTochar( int number, char* string) {
 void printMacAddress (char haddr[HADDR_LEN]) {
 	int i;
 	for (i=0; i<5; i++) {
-		printf ("%02x:", haddr[i]);
+		printf ("%02x:", (unsigned char)haddr[i]);
 	}
-	printf ("%02x\n",haddr[5]);
+	printf ("%02x\n",(unsigned char)haddr[5]);
 }
 
 
